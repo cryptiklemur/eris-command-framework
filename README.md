@@ -13,8 +13,7 @@ a Plugin (that implements `PluginInterface`) has Commands, that are annotated by
 
 
 ```
-import CommandFramework from 'eris-command-framework';
-import {Interfaces} from 'eris-command-framework';
+import {CommandFramework, Interfaces, types} from 'eris-command-framework';
 
 const container = new Container({defaultScope: 'singleton'});
 const commandFramework = new CommandFramework(container, {prefix: '|'}); // Prefix is required
@@ -40,6 +39,9 @@ const connection: Connection = await createConnection(
         ],
     },
 );
+
+
+container.bind<Connection>(types.Connection).toConstantValue(connection);
 
 const plugins: Interfaces.PluginInterface[] = [
     // Array of PluginInterfaces
