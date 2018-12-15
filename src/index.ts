@@ -9,6 +9,7 @@ export {default as types} from './types';
 export {Interfaces} from './Interfaces';
 export {Buffer} from './Buffer';
 export {Builder} from './Builder';
+export {Decorator} from './Decorator';
 export {Entity} from './Entity';
 export {Info} from './Info';
 export {Model} from './Model';
