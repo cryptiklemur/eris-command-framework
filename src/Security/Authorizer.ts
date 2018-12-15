@@ -12,7 +12,7 @@ enum Allowed {
 }
 
 @injectable()
-export class Authorizer {
+export default class Authorizer {
     private static DoesPermissionMatch(permission: string, node: string, strict: boolean): boolean {
         return (!strict && node.indexOf('*') >= 0 && Authorizer.IsWildcardMatch(permission, node))
                || node === permission;
