@@ -1,7 +1,7 @@
-import ChannelBuffer from './ChannelBuffer';
-import MessageBuffer from './MessageBuffer';
+import _ChannelBuffer from './ChannelBuffer';
+import _MessageBuffer from './MessageBuffer';
 
-export const Buffer = {
-    ChannelBuffer,
-    MessageBuffer,
-};
+export namespace Buffer {
+    export const ChannelBuffer = _ChannelBuffer;
+    export const MessageBuffer = _MessageBuffer;
+}

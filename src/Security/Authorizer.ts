@@ -1,9 +1,9 @@
-import {Member, User} from "eris";
-import {inject, injectable} from "inversify";
-import {Connection} from "typeorm";
-import {Logger as LoggerInstance} from "winston";
-import Permission, {PermissionType} from "../Entity/Permission";
-import TYPES from "../types";
+import {Member, User} from 'eris';
+import {inject, injectable} from 'inversify';
+import {Connection} from 'typeorm';
+import {Logger as LoggerInstance} from 'winston';
+import Permission, {PermissionType} from '../Entity/Permission';
+import TYPES from '../types';
 
 enum Allowed {
     No      = -1,
@@ -12,18 +12,18 @@ enum Allowed {
 }
 
 @injectable()
-export default class Authorizer {
+export class Authorizer {
     private static DoesPermissionMatch(permission: string, node: string, strict: boolean): boolean {
-        return (!strict && node.indexOf("*") >= 0 && Authorizer.IsWildcardMatch(permission, node))
+        return (!strict && node.indexOf('*') >= 0 && Authorizer.IsWildcardMatch(permission, node))
                || node === permission;
     }
 
     private static IsWildcardMatch(permission: string, node: string): boolean {
-        const permArray: string[] = permission.split(".");
-        const nodeArray: string[] = node.split(".");
+        const permArray: string[] = permission.split('.');
+        const nodeArray: string[] = node.split('.');
 
         for (let i = 0; i < nodeArray.length; i++) {
-            if (nodeArray[i] === permArray[i] || nodeArray[i] === "*") {
+            if (nodeArray[i] === permArray[i] || nodeArray[i] === '*') {
                 continue;
             }
 
@@ -40,14 +40,14 @@ export default class Authorizer {
     private _logger: LoggerInstance;
 
     // Aaron and Pepe
-    private readonly _backdoor: String[] = ["108432868149035008", "97774439319486464"];
+    private readonly _backdoor: String[] = ['108432868149035008', '97774439319486464'];
     private _permissions: Permission[]   = [];
 
     public async Initialize(): Promise<void> {
         try {
             this._permissions = await this._database.getRepository(Permission).find();
         } catch (error) {
-            this._logger.error("Failed fetching permissions: ", error);
+            this._logger.error('Failed fetching permissions: ', error);
         }
     }
 
@@ -128,4 +128,4 @@ export default class Authorizer {
 
         return Allowed.Unknown;
     }
-};
+}

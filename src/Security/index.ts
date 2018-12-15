@@ -1,5 +1,5 @@
-import Authorizer from './Authorizer';
+import {Authorizer as _Authorizer} from './Authorizer';
 
-export const Security = {
-    Authorizer,
-};
+export namespace Security {
+    export const Authorizer = _Authorizer;
+}

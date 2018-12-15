@@ -1,7 +1,7 @@
-import CommandInfo from './CommandInfo';
-import ParameterInfo from './ParameterInfo';
+import _CommandInfo from './CommandInfo';
+import _ParameterInfo from './ParameterInfo';
 
-export const Info = {
-    CommandInfo,
-    ParameterInfo,
+export namespace Info {
+    export const CommandInfo = _CommandInfo;
+    export const ParameterInfo = _ParameterInfo;
 };
