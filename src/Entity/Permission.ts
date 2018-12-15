@@ -1,6 +1,6 @@
 import {BaseEntity, Column, Entity, Index, PrimaryGeneratedColumn} from 'typeorm';
 
-enum PermissionType {
+export enum PermissionType {
     User = 1,
     Role = 2,
 }
