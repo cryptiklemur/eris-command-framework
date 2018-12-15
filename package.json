@@ -9,7 +9,7 @@
     "build": "tsc --project tsconfig.json"
   },
   "author": "Aaron Scherer <aequasi@gmail.com>, Arunesh <arunesh90@outlook.com>",
-  "private": true,
+  "license": "MIT",
   "devDependencies": {
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.9",
