@@ -31,6 +31,10 @@ abstract class AbstractPlugin implements PluginInterface {
         return parseInt(num, 10);
     }
 
+    public get prefix() {
+        return this.Configuration.prefix;
+    }
+
     @inject(TYPES.DiscordClient)
     public Client: Client;
 
