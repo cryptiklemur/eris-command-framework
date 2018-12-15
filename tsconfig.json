@@ -1,34 +1,29 @@
 {
     "compilerOptions": {
-        "target":                       "es5",
-        "lib":                          [
+        "target":                 "es5",
+        "lib":                    [
             "es6",
             "dom"
         ],
-        "module":                       "commonjs",
-        "moduleResolution":             "node",
-//        "allowSyntheticDefaultImports": true,
-//        "noUnusedLocals":               true,
-//        "noUnusedParameters":           true,
-//        "removeComments":               false,
-        "preserveConstEnums":           true,
-        "sourceMap":                    true,
-//        "skipLibCheck":                 true,
-        "declaration":                  true,
-        "experimentalDecorators":       true,
-        "emitDecoratorMetadata":        true,
-        "noImplicitAny":                false,
-        "outDir":                       "dist/",
-        "pretty":                       true,
-        "typeRoots":                    [
+        "module":                 "commonjs",
+        "moduleResolution":       "node",
+        "preserveConstEnums":     true,
+        "sourceMap":              true,
+        "declaration":            true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata":  true,
+        "noImplicitAny":          false,
+        "outFile":                "index.js",
+        "pretty":                 true,
+        "typeRoots":              [
             "./node_modules/@types"
         ],
-        "types":                        [
+        "types":                  [
             "node",
             "reflect-metadata"
         ]
     },
-    "include": [
+    "include":         [
         "src/**/*"
     ],
     "exclude":         [

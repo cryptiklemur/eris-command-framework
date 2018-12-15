@@ -1,0 +1,14 @@
+language: node_js
+
+node_js:
+    - "10"
+
+sudo: false
+
+install:
+    - npm i
+    - npm i semantic-release@15 @semantic-release/npm
+
+script:
+    - npm run build
+    - npx semantic-release -e @semantic-release/npm
