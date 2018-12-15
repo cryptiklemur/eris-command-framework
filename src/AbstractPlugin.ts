@@ -31,7 +31,7 @@ abstract class AbstractPlugin implements PluginInterface {
         return parseInt(num, 10);
     }
 
-    public get prefix() {
+    protected get prefix() {
         return this.Configuration.prefix;
     }
 
