@@ -1,14 +1,14 @@
 {
-  "name": "@hotline/bot",
+  "name": "eris-command-framework",
   "version": "1.0.0",
-  "description": "Bot for Discord Hotline",
-  "main": "index.ts",
+  "description": "Command Framework for Eris",
+  "main": "src/index.ts",
   "scripts": {
     "publish-please": "publish-please",
     "prepublish": "publish-please guard",
     "build": "tsc --project tsconfig.json"
   },
-  "author": "Aaron Scherer <aequasi@gmail.com>, Arunesh <arunesh90@outlook.com>",
+  "author": "Aaron Scherer <aequasi@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/moment": "^2.13.0",
