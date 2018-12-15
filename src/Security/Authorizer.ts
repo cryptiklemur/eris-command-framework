@@ -34,20 +34,20 @@ export default class Authorizer {
     }
 
     @inject(TYPES.Connection)
-    private _database: Connection;
+    private database: Connection;
 
     @inject(TYPES.Logger)
-    private _logger: LoggerInstance;
+    private logger: LoggerInstance;
 
     // Aaron and Pepe
-    private readonly _backdoor: String[] = ['108432868149035008', '97774439319486464'];
-    private _permissions: Permission[]   = [];
+    private readonly backdoor: String[] = ['108432868149035008', '97774439319486464'];
+    private permissions: Permission[]   = [];
 
     public async Initialize(): Promise<void> {
         try {
-            this._permissions = await this._database.getRepository(Permission).find();
+            this.permissions = await this.database.getRepository(Permission).find();
         } catch (error) {
-            this._logger.error('Failed fetching permissions: ', error);
+            this.logger.error('Failed fetching permissions: ', error);
         }
     }
 
@@ -59,7 +59,7 @@ export default class Authorizer {
             return false;
         }
 
-        if (this._backdoor.indexOf(member.id) >= 0) {
+        if (this.backdoor.indexOf(member.id) >= 0) {
             return true;
         }
 
@@ -89,7 +89,7 @@ export default class Authorizer {
     }
 
     private IsRoleAllowed(permission: string, roleId: string, strict: boolean): Allowed {
-        const perms: ReadonlyArray<Permission> = this._permissions.filter(
+        const perms: ReadonlyArray<Permission> = this.permissions.filter(
             (x) => x.Type === PermissionType.Role && x.TypeId === roleId,
         );
 
@@ -105,12 +105,12 @@ export default class Authorizer {
     private IsUserAllowed(permission: string, member: Member | User, strict: boolean): Allowed {
         let perms: ReadonlyArray<Permission>;
         if (member instanceof Member) {
-            perms = this._permissions.filter(
+            perms = this.permissions.filter(
                 (x) => x.Type === PermissionType.User
                        && x.TypeId === member.id && x.GuildId === member.guild.id,
             );
         } else {
-            perms = this._permissions.filter(
+            perms = this.permissions.filter(
                 (x) => x.Type === PermissionType.User
                        && x.TypeId === member.id && !x.GuildId,
             );

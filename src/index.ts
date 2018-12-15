@@ -1,3 +1,5 @@
+import CommandFramework from './CommandFramework';
+
 export {default as AbstractPlugin} from './AbstractPlugin';
 export {default as CommandContext} from './CommandContext';
 export {default as CommandError} from './CommandError';
@@ -16,3 +18,5 @@ export {default as Model} from './Model';
 export {default as Reader} from './Reader';
 export {default as Result} from './Result';
 export {default as Security} from './Security';
+
+export default CommandFramework;

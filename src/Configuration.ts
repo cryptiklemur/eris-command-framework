@@ -1,0 +1,8 @@
+export default class Configuration {
+    public readonly prefix: string;
+    public readonly onMessageUpdate: boolean = true;
+
+    public constructor(init?: Configuration) {
+        Object.assign(this, init);
+    }
+}
