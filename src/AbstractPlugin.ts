@@ -6,6 +6,7 @@ import {Logger as LoggerInstance} from 'winston';
 
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandContext from './CommandContext';
+import Configuration from './Configuration';
 import {Interfaces} from './Interfaces';
 import Embed from './Model/Embed';
 import TYPES from './types';
@@ -32,6 +33,9 @@ abstract class AbstractPlugin implements PluginInterface {
 
     @inject(TYPES.DiscordClient)
     public Client: Client;
+
+    @inject(TYPES.Configuration)
+    public Configuration: Configuration;
 
     @inject(TYPES.MessageBuffer)
     public MessageBuffer: MessageBuffer;
