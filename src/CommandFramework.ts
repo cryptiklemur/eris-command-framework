@@ -27,7 +27,7 @@ export default class CommandFramework {
         container.bind<Authorizer>(Types.Security.Authorizer).to(Authorizer);
     }
 
-    public async Initialize(plugins: { [name: string]: Interfaces.PluginInterface }): Promise<void> {
+    public async Initialize(plugins: { [name: string]: Interfaces.PluginInterface } = {}): Promise<void> {
         for (const name of Object.keys(plugins)) {
             const plugin: PluginInterface = plugins[name];
             this.container.bind<Interfaces.PluginInterface>(Types.Plugin).to(plugin as any).whenTargetNamed(name);
