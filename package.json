@@ -1,6 +1,6 @@
 {
     "name": "eris-command-framework",
-    "version": "1.0.2",
+    "version": "1.0.5",
     "description": "Command Framework for Eris",
     "main": "dist/index.ts",
     "types": "dist/index.d.ts",
