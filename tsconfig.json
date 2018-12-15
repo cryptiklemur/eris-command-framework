@@ -1,5 +1,4 @@
 {
-    "compileOnSave":   false,
     "compilerOptions": {
         "target":                       "es5",
         "lib":                          [
@@ -7,16 +6,14 @@
             "dom"
         ],
         "module":                       "commonjs",
-        "jsx":                          "preserve",
-        "allowJs":                      true,
         "moduleResolution":             "node",
-        "allowSyntheticDefaultImports": true,
-        "noUnusedLocals":               true,
-        "noUnusedParameters":           true,
-        "removeComments":               false,
+//        "allowSyntheticDefaultImports": true,
+//        "noUnusedLocals":               true,
+//        "noUnusedParameters":           true,
+//        "removeComments":               false,
         "preserveConstEnums":           true,
         "sourceMap":                    true,
-        "skipLibCheck":                 true,
+//        "skipLibCheck":                 true,
         "declaration":                  true,
         "experimentalDecorators":       true,
         "emitDecoratorMetadata":        true,
@@ -30,5 +27,12 @@
             "node",
             "reflect-metadata"
         ]
-    }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude":         [
+        "dist",
+        "node_modules"
+    ]
 }
