@@ -6,7 +6,7 @@
     "types":           "dist/index.d.ts",
     "scripts":         {
         "publish-please": "publish-please",
-        "prepublish":     "publish-please guard",
+        "prepublish":     "npm run build && publish-please guard",
         "build":          "tsc --project tsconfig.json"
     },
     "author":          "Aaron Scherer <aequasi@gmail.com>",
