@@ -1,15 +1,15 @@
-import _Alias from './Alias';
-import _Command from './Command';
-import _Permission from './Permission';
-import _Remainder from './Remainder';
-import _Required from './Required';
-import _Types from './Types';
+import Alias from './Alias';
+import Command from './Command';
+import Permission from './Permission';
+import Remainder from './Remainder';
+import Required from './Required';
+import Types from './Types';
 
-export namespace Decorator {
-    export const Alias = _Alias;
-    export const Command = _Command;
-    export const Permission = _Permission;
-    export const Remainder = _Remainder;
-    export const Required = _Required;
-    export const Types = _Types;
-}
+export default {
+    Alias,
+    Command,
+    Permission,
+    Remainder,
+    Required,
+    Types,
+};

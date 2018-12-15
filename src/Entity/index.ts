@@ -1,5 +1,5 @@
 import Permission from './Permission';
 
-export const Entity = {
+export default {
     Permission,
 };

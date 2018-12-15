@@ -1,7 +1,8 @@
-import _EmbedBuilder from './EmbedBuilder';
-import _StringBuilder from './StringBuilder';
+import EmbedBuilder from './EmbedBuilder';
+import StringBuilder from './StringBuilder';
 
-export namespace Builder {
-    export const EmbedBuilder = _EmbedBuilder;
-    export const StringBuilder = _StringBuilder;
-}
+export default {
+    EmbedBuilder,
+    StringBuilder,
+};
+

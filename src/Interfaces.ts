@@ -5,7 +5,7 @@ import CommandError from './CommandError';
 import ParameterInfo from './Info/ParameterInfo';
 import TypeReaderResult from './Result/TypeReaderResult';
 
-namespace Interfaces {
+export namespace Interfaces {
     export interface PluginInterface {
         Context: CommandContext;
 
@@ -39,5 +39,3 @@ namespace Interfaces {
         IsSuccess: boolean;
     }
 }
-
-export {Interfaces};
