@@ -14,10 +14,6 @@ import PluginInterface = Interfaces.PluginInterface;
 
 @injectable()
 abstract class AbstractPlugin implements PluginInterface {
-    // @ts-ignore
-    public static AddToContainer(container: Container): void {
-    }
-
     protected static RGBToHex(r: number, g: number, b: number): number {
         let num: string = '0x';
         num += [r, g, b].map(
@@ -51,6 +47,9 @@ abstract class AbstractPlugin implements PluginInterface {
     public Logger: LoggerInstance;
 
     public Context: CommandContext;
+
+    public AddToContainer(container: Container): void {
+    }
 
     public async Initialize(): Promise<void> {
     }
