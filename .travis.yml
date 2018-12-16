@@ -11,6 +11,4 @@ install:
 
 script:
     - npm run build
-    - ls -lha
-    - npm run test
     - npx semantic-release -e @semantic-release/npm
