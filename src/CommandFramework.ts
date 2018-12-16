@@ -35,7 +35,7 @@ export default class CommandFramework {
         for (const name of Object.keys(this.plugins)) {
             const plugin: PluginInterface = this.plugins[name];
             this.container.bind<Interfaces.PluginInterface>(Types.Plugin).to(plugin as any).whenTargetNamed(name);
-            (plugin).AddToContainer(this.container);
+            (plugin.constructor as any).AddToContainer(this.container);
         }
 
         await this.container.get<Authorizer>(Types.Security.Authorizer).Initialize();
@@ -48,7 +48,7 @@ export default class CommandFramework {
         for (const name of Object.keys(this.plugins)) {
             const plugin = this.plugins[name];
 
-            pluginEntities.push(...plugin.GetEntities());
+            pluginEntities.push(...(plugin.constructor as any).GetEntities());
         }
 
         return [
