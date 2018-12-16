@@ -35,7 +35,7 @@ const connection: Connection = await createConnection(
         },
         entities:       [
             // Your entities here,
-            ...commandFramework.getEntities()
+            ...commandFramework.GetEntities()
         ],
     },
 );

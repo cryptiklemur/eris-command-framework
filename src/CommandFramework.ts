@@ -14,7 +14,11 @@ import Types from './types';
 import PluginInterface = Interfaces.PluginInterface;
 
 export default class CommandFramework {
-    constructor(private container: Container, configuration: Configuration) {
+    constructor(
+        private container: Container,
+        configuration: Configuration,
+        private plugins: { [name: string]: Interfaces.PluginInterface } = {},
+    ) {
         container.bind<Configuration>(Types.Configuration).toConstantValue(configuration);
         if (!container.isBound(Types.Logger)) {
             container.bind<Logger>(Types.Logger).to(NullLogger);
@@ -27,21 +31,29 @@ export default class CommandFramework {
         container.bind<Authorizer>(Types.Security.Authorizer).to(Authorizer);
     }
 
-    public async Initialize(plugins: { [name: string]: Interfaces.PluginInterface } = {}): Promise<void> {
-        for (const name of Object.keys(plugins)) {
-            const plugin: PluginInterface = plugins[name];
+    public async Initialize(): Promise<void> {
+        for (const name of Object.keys(this.plugins)) {
+            const plugin: PluginInterface = this.plugins[name];
             this.container.bind<Interfaces.PluginInterface>(Types.Plugin).to(plugin as any).whenTargetNamed(name);
             (plugin).AddToContainer(this.container);
         }
 
         await this.container.get<Authorizer>(Types.Security.Authorizer).Initialize();
-        await this.container.get<CommandService>(Types.Command.Service).Initialize(plugins);
+        await this.container.get<CommandService>(Types.Command.Service).Initialize(this.plugins);
         await this.container.get<CommandHandler>(Types.Command.Handler).Install();
     }
 
-    public getEntities(): any[] {
+    public GetEntities(): any[] {
+        const pluginEntities = [];
+        for (const name of Object.keys(this.plugins)) {
+            const plugin = this.plugins[name];
+
+            pluginEntities.push(...plugin.GetEntities());
+        }
+
         return [
             Permission,
+            ...pluginEntities,
         ];
     }
 }

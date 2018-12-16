@@ -12,6 +12,7 @@ export namespace Interfaces {
 
         Initialize();
         AddToContainer(container: Container);
+        GetEntities(): any[];
     }
 
     export interface CommandInterface {

@@ -51,6 +51,10 @@ abstract class AbstractPlugin implements PluginInterface {
     public AddToContainer(container: Container): void {
     }
 
+    public GetEntities(): any[] {
+        return [];
+    }
+
     public async Initialize(): Promise<void> {
     }
 
