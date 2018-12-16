@@ -14,6 +14,14 @@ import PluginInterface = Interfaces.PluginInterface;
 
 @injectable()
 abstract class AbstractPlugin implements PluginInterface {
+    public static AddToContainer(container: Container): void {
+        throw new Error('Plugin must implement AddToContainer, even if its empty.');
+    }
+
+    public static GetEntities(): any[] {
+        throw new Error('Plugin must implement GetEntities, even if its empty.');
+    }
+
     protected static RGBToHex(r: number, g: number, b: number): number {
         let num: string = '0x';
         num += [r, g, b].map(
@@ -47,13 +55,6 @@ abstract class AbstractPlugin implements PluginInterface {
     public Logger: LoggerInstance;
 
     public Context: CommandContext;
-
-    public AddToContainer(container: Container): void {
-    }
-
-    public GetEntities(): any[] {
-        return [];
-    }
 
     public async Initialize(): Promise<void> {
     }

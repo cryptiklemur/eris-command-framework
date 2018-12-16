@@ -1,5 +1,4 @@
 import {Client} from 'eris';
-import {Container} from 'inversify';
 
 import CommandContext from './CommandContext';
 import CommandError from './CommandError';
@@ -11,8 +10,6 @@ export namespace Interfaces {
         Context: CommandContext;
 
         Initialize();
-        AddToContainer(container: Container);
-        GetEntities(): any[];
     }
 
     export interface CommandInterface {
