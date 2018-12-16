@@ -109,7 +109,7 @@ abstract class AbstractPlugin implements PluginInterface {
     }
 
     protected GetRepository<T>(entityClass: any): Repository<T> {
-        return <Repository<T>> this.Database.getRepository<T>(entityClass);
+        return this.Database.getRepository<T>(entityClass) as Repository<T>;
     }
 }
 
