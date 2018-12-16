@@ -1,8 +1,8 @@
 {
     "name": "eris-command-framework",
     "description": "Command Framework for Eris",
-    "main": "dist/index.ts",
-    "types": "dist/index.d.ts",
+    "main": "index.js",
+    "types": "index.d.ts",
     "scripts": {
         "test": "node test/index.js",
         "build": "tsc --project tsconfig.json",
