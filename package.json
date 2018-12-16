@@ -5,10 +5,8 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "test": "node test/index.js",
-        "build": "tsc --project tsconfig.json"
-    },
-    "publishConfig": {
-        "pkgRoot": "dist"
+        "build": "tsc --project tsconfig.json",
+        "prepublish": "rm -r src test && mv dist/* . && rmdir dist"
     },
     "author": "Aaron Scherer <aequasi@gmail.com>",
     "license": "MIT",
