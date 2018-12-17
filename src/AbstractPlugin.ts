@@ -22,6 +22,10 @@ abstract class AbstractPlugin implements PluginInterface {
         throw new Error('Plugin must implement GetEntities, even if its empty.');
     }
 
+    public static GetName(): any[] {
+        throw new Error('Plugin must implement Name.');
+    }
+
     protected static RGBToHex(r: number, g: number, b: number): number {
         let num: string = '0x';
         num += [r, g, b].map(
