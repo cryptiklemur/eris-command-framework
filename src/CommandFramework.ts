@@ -1,4 +1,4 @@
-import {Container} from 'inversify';
+import {Container, decorate, injectable} from 'inversify';
 import {Logger} from 'winston';
 import * as NullLogger from 'winston-null';
 import MessageBuffer from './Buffer/MessageBuffer';
@@ -12,6 +12,8 @@ import {Interfaces} from './Interfaces';
 import Authorizer from './Security/Authorizer';
 import Types from './types';
 import PluginInterface = Interfaces.PluginInterface;
+
+decorate(injectable, NullLogger);
 
 export default class CommandFramework {
     constructor(
