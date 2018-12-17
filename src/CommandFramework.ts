@@ -13,7 +13,7 @@ import Authorizer from './Security/Authorizer';
 import Types from './types';
 import PluginInterface = Interfaces.PluginInterface;
 
-decorate(injectable, NullLogger);
+decorate(injectable(), NullLogger);
 
 export default class CommandFramework {
     constructor(
