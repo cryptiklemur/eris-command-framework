@@ -1,6 +1,5 @@
-import {Container, decorate, injectable} from 'inversify';
-import {Logger} from 'winston';
-import {NullLogger} from 'winston-null';
+import {Container} from 'inversify';
+import {createLogger, format, Logger} from 'winston';
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandHandler from './CommandHandler';
 import CommandParser from './CommandParser';
@@ -13,8 +12,6 @@ import Authorizer from './Security/Authorizer';
 import Types from './types';
 import PluginInterface = Interfaces.PluginInterface;
 
-decorate(injectable(), NullLogger);
-
 export default class CommandFramework {
     constructor(
         private container: Container,
@@ -23,7 +20,11 @@ export default class CommandFramework {
     ) {
         container.bind<Configuration>(Types.Configuration).toConstantValue(configuration);
         if (!container.isBound(Types.Logger)) {
-            container.bind<Logger>(Types.Logger).to(NullLogger);
+            container.bind<Logger>(Types.Logger).toConstantValue(createLogger({
+                level:      'info',
+                format:     format.json(),
+                transports: [],
+            }));
         }
 
         container.bind<MessageBuffer>(Types.MessageBuffer).to(MessageBuffer);
