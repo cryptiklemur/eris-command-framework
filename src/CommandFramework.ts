@@ -1,6 +1,6 @@
 import {Container, decorate, injectable} from 'inversify';
 import {Logger} from 'winston';
-import * as NullLogger from 'winston-null';
+import {NullLogger} from 'winston-null';
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandHandler from './CommandHandler';
 import CommandParser from './CommandParser';
