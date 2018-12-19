@@ -2,7 +2,7 @@ import {Client, TextableChannel} from 'eris';
 import {Container, inject, injectable} from 'inversify';
 import * as moment from 'moment';
 import {Connection, Repository} from 'typeorm';
-import {Logger as LoggerInstance} from 'winston';
+import {Logger} from 'winston';
 
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandContext from './CommandContext';
@@ -54,7 +54,7 @@ abstract class AbstractPlugin implements PluginInterface {
     public Database: Connection;
 
     @inject(TYPES.Logger)
-    public Logger: LoggerInstance;
+    public Logger: Logger;
 
     public Context: CommandContext;
 
@@ -84,7 +84,7 @@ abstract class AbstractPlugin implements PluginInterface {
     protected async SendEmbed(embed: Embed): Promise<void> {
         try {
             let jsonEmbed: any = embed.Serialize();
-            this.Logger.data('Creating embed: ', jsonEmbed);
+            this.Logger.info('Creating embed: ', jsonEmbed);
 
             await this.Context.Channel.createMessage({embed: jsonEmbed});
         } catch (error) {
