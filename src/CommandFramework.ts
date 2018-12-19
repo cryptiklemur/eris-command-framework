@@ -22,7 +22,10 @@ export default class CommandFramework {
         if (!container.isBound(Types.Logger)) {
             container.bind<Logger>(Types.Logger).toConstantValue(createLogger({
                 level:      'info',
-                format:     format.json(),
+                format:     format.combine(
+                    format.json(),
+                    format.splat()
+                ),
                 transports: [],
             }));
         }
