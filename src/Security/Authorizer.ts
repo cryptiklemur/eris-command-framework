@@ -47,7 +47,7 @@ export default class Authorizer {
         try {
             this.permissions = await this.database.getRepository(Permission).find();
         } catch (error) {
-            this.logger.error('Failed fetching permissions: ', error);
+            this.logger.error('Failed fetching permissions: %O', error);
         }
     }
 

@@ -49,14 +49,14 @@ export default class CommandHandler {
             try {
                 const result: ResultInterface = await this.commands.ExecuteAsync(context, messageStart);
                 if (result.IsSuccess === false) {
-                    this.logger.error(result.Error.toString(), result.ErrorReason);
+                    this.logger.error('Code: %d Reason: %s',result.Error.toString(), result.ErrorReason);
                     if (result instanceof ExecuteResult) {
-                        this.logger.error('Exception: ', result.Exception);
+                        this.logger.error('Exception: %O', result.Exception);
                     }
                 }
 
             } catch (error) {
-                this.logger.error('Error running command: ', error);
+                this.logger.error('Error running command: %O', error);
             }
         }
     }

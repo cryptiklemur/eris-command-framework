@@ -84,11 +84,11 @@ abstract class AbstractPlugin implements PluginInterface {
     protected async SendEmbed(embed: Embed): Promise<void> {
         try {
             let jsonEmbed: any = embed.Serialize();
-            this.Logger.info('Creating embed: ', jsonEmbed);
+            this.Logger.info('Creating embed: %j', jsonEmbed);
 
             await this.Context.Channel.createMessage({embed: jsonEmbed});
         } catch (error) {
-            this.Logger.error('Error sending message: ', error.response);
+            this.Logger.error('Error sending message: %s', error.response);
             throw error;
         }
     }
