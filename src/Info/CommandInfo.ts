@@ -131,7 +131,7 @@ export default class CommandInfo implements CommandInterface {
     }
 
     private GetParameters(): string[] {
-        const paramsRegex: RegExp      = /^[A-Za-z]+\(([A-Za-z0-9-_+."'/*,\s=]+)?\)\s+{/m;
+        const paramsRegex: RegExp      = /^(?:async )?[A-Za-z]+\(([A-Za-z0-9-_+."'\/*,\s=]+)?\)\s+{/m;
         const code: string             = this.Code.toString().replace(re, '');
         const result: RegExpMatchArray = code.match(paramsRegex);
         if (!result || !result[1]) {
