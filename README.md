@@ -11,7 +11,6 @@ a Plugin (that implements `PluginInterface`) has Commands, that are annotated by
 * TypeORM
 * Inversify
 
-
 ```
 import {CommandFramework, Interfaces, types} from 'eris-command-framework';
 
