@@ -23,7 +23,7 @@ export namespace Interfaces {
         Parameters: ParameterInfo[];
         Code: Function;
         Types: Object;
-        RemainderFields: number[];
+        RemainderField: number;
         RequiredFields: number[];
     }
 

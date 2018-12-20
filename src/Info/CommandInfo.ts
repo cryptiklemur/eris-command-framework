@@ -12,16 +12,27 @@ const re: RegExp = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=*('(?:\\'|[^'\r\n])*'))/mg
 
 export default class CommandInfo implements CommandInterface {
     public Plugin: PluginInterface;
+
     public Aliases: string[]           = [];
+
     public ShortDescription?: string;
+
     public LongDescription?: string;
+
     public Syntax?: string             = '';
+
     public PermissionNode?: string     = null;
+
     public PermissionStrict: boolean   = false;
+
     public Parameters: ParameterInfo[] = [];
+
     public Code: Function;
+
     public Types: Object               = {};
-    public RemainderFields: number[]   = [];
+
+    public RemainderField: number;
+
     public RequiredFields: number[]    = [];
 
     constructor(init?: Partial<CommandInterface>) {
@@ -80,6 +91,7 @@ export default class CommandInfo implements CommandInterface {
 
         try {
             await this.Code.apply(this.Plugin, args);
+
             return ExecuteResult.FromSuccess();
         } catch (error) {
             return ExecuteResult.FromException(error);
@@ -110,7 +122,7 @@ export default class CommandInfo implements CommandInterface {
             const param: ParameterInfo = new ParameterInfo(
                 cleanName,
                 this.Types[cleanName],
-                this.RemainderFields && this.RemainderFields.indexOf(index) >= 0,
+                this.RemainderField && this.RemainderField === index,
                 name.indexOf('...') === 0,
                 defaultValue,
             );
