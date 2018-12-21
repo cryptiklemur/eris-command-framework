@@ -15,6 +15,7 @@ import PluginInterface = Interfaces.PluginInterface;
 @injectable()
 abstract class AbstractPlugin implements PluginInterface {
     public static Name: string;
+    public static Config: any = {};
 
     public static AddToContainer(container: Container): void {
         throw new Error('Plugin must implement AddToContainer, even if its empty.');

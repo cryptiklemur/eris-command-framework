@@ -24,6 +24,7 @@
         "typescript": "^3.2.2"
     },
     "dependencies": {
+        "@hotline/core-plugin": "^1.0.4",
         "await-semaphore": "^0.1.3",
         "chrono-node": "^1.3.5",
         "eris": "^0.9.0",
