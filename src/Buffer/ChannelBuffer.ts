@@ -5,15 +5,15 @@ import {setInterval} from 'timers';
 const mutex: Mutex = new Mutex();
 
 export default class ChannelBuffer<T> {
-    private _messages: T[] = [];
+    private messages: T[] = [];
 
-    constructor(private _channel: Channel, tick: Function, interval: number = 1000) {
+    constructor(private channel: Channel, tick: Function, interval: number = 1000) {
         setInterval(
             async () => {
                 const release: any = await mutex.acquire();
 
-                let messages: T[]     = this._messages.slice();
-                this._messages.length = 0;
+                let messages: T[]    = this.messages.slice();
+                this.messages.length = 0;
 
                 release();
 
@@ -21,7 +21,7 @@ export default class ChannelBuffer<T> {
                     return;
                 }
 
-                tick(this._channel, messages);
+                tick(this.channel, messages);
             },
             interval,
         );
@@ -29,7 +29,7 @@ export default class ChannelBuffer<T> {
 
     public addItem(obj: T): void {
         mutex.acquire().then((release) => {
-            this._messages.push(obj);
+            this.messages.push(obj);
 
             release();
         });

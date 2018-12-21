@@ -1,27 +1,26 @@
 import CommandError from '../CommandError';
 import {Interfaces} from '../Interfaces';
-import ResultInterface = Interfaces.ResultInterface;
 
-export default class ExecuteResult implements ResultInterface {
-    public static FromSuccess(): ExecuteResult {
+export default class ExecuteResult implements Interfaces.ResultInterface {
+    public static fromSuccess(): ExecuteResult {
         return new ExecuteResult();
     }
 
-    public static FromError(error: CommandError, reason: string): ExecuteResult {
+    public static fromError(error: CommandError, reason: string): ExecuteResult {
         return new ExecuteResult(null, error, reason);
     }
 
-    public static FromException(error: Error): ExecuteResult {
+    public static fromException(error: Error): ExecuteResult {
         return new ExecuteResult(error, CommandError.Exception, error.message);
     }
 
-    public static FromResult(result: ResultInterface): ExecuteResult {
-        return new ExecuteResult(null, result.Error, result.ErrorReason);
+    public static fromResult(result: Interfaces.ResultInterface): ExecuteResult {
+        return new ExecuteResult(null, result.error, result.errorReason);
     }
 
-    public IsSuccess: boolean;
+    public isSuccess: boolean;
 
-    constructor(public Exception?: Error, public Error?: CommandError, public ErrorReason?: string) {
-        this.IsSuccess = !Error;
+    constructor(public exception?: Error, public error?: CommandError, public errorReason?: string) {
+        this.isSuccess = !error;
     }
 };

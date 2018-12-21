@@ -33,17 +33,17 @@ export default class Authorizer {
         return true;
     }
 
-    @inject(TYPES.Connection)
+    @inject(TYPES.connection)
     private database: Connection;
 
-    @inject(TYPES.Logger)
+    @inject(TYPES.logger)
     private logger: LoggerInstance;
 
     // Aaron and Pepe
     private readonly backdoor: String[] = ['108432868149035008', '97774439319486464'];
     private permissions: Permission[]   = [];
 
-    public async Initialize(): Promise<void> {
+    public async initialize(): Promise<void> {
         try {
             this.permissions = await this.database.getRepository(Permission).find();
         } catch (error) {
@@ -51,7 +51,7 @@ export default class Authorizer {
         }
     }
 
-    public IsAuthorized(permission: string, member: Member | User, strict: boolean): boolean {
+    public isAuthorized(permission: string, member: Member | User, strict: boolean): boolean {
         if (!permission) {
             return true;
         }
@@ -69,7 +69,7 @@ export default class Authorizer {
             const roles: string[] = member.roles;
             roles.push(member.guild.id);
             for (let roleId of roles) {
-                let allowed: number = this.IsRoleAllowed(permission, roleId, strict);
+                let allowed: number = this.isRoleAllowed(permission, roleId, strict);
                 if (allowed === Allowed.No) {
                     return false;
                 } else if (allowed === Allowed.Yes) {
@@ -78,7 +78,7 @@ export default class Authorizer {
             }
         }
 
-        let allowed: number = this.IsUserAllowed(permission, member, strict);
+        let allowed: number = this.isUserAllowed(permission, member, strict);
         if (allowed === Allowed.No) {
             return false;
         } else if (allowed === Allowed.Yes) {
@@ -88,31 +88,31 @@ export default class Authorizer {
         return hasPerms;
     }
 
-    private IsRoleAllowed(permission: string, roleId: string, strict: boolean): Allowed {
+    private isRoleAllowed(permission: string, roleId: string, strict: boolean): Allowed {
         const perms: ReadonlyArray<Permission> = this.permissions.filter(
-            (x) => x.Type === PermissionType.Role && x.TypeId === roleId,
+            (x) => x.type === PermissionType.Role && x.typeId === roleId,
         );
 
         for (let perm of perms) {
-            if (Authorizer.DoesPermissionMatch(permission, perm.Node, strict)) {
-                return perm.Allowed ? Allowed.Yes : Allowed.No;
+            if (Authorizer.DoesPermissionMatch(permission, perm.node, strict)) {
+                return perm.allowed ? Allowed.Yes : Allowed.No;
             }
         }
 
         return Allowed.Unknown;
     }
 
-    private IsUserAllowed(permission: string, member: Member | User, strict: boolean): Allowed {
+    private isUserAllowed(permission: string, member: Member | User, strict: boolean): Allowed {
         let perms: ReadonlyArray<Permission>;
         if (member instanceof Member) {
             perms = this.permissions.filter(
-                (x) => x.Type === PermissionType.User
-                       && x.TypeId === member.id && x.GuildId === member.guild.id,
+                (x) => x.type === PermissionType.User
+                       && x.typeId === member.id && x.guildId === member.guild.id,
             );
         } else {
             perms = this.permissions.filter(
-                (x) => x.Type === PermissionType.User
-                       && x.TypeId === member.id && !x.GuildId,
+                (x) => x.type === PermissionType.User
+                       && x.typeId === member.id && !x.guildId,
             );
         }
 
@@ -121,8 +121,8 @@ export default class Authorizer {
         }
 
         for (let perm of perms) {
-            if (Authorizer.DoesPermissionMatch(permission, perm.Node, strict)) {
-                return perm.Allowed ? Allowed.Yes : Allowed.No;
+            if (Authorizer.DoesPermissionMatch(permission, perm.node, strict)) {
+                return perm.allowed ? Allowed.Yes : Allowed.No;
             }
         }
 

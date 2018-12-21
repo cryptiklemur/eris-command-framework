@@ -9,8 +9,7 @@ import TypeReaderValue from '../Result/TypeReaderValue';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class DurationTypeReader extends AbstractTypeReader {
-
-    private static ParseDuration(input: string): moment.Duration {
+    private static parseDuration(input: string): moment.Duration {
         const days: string    = '(d(ays?)?)';
         const hours: string   = '(h((ours?)|(rs?))?)';
         const minutes: string = '(m((inutes?)|(ins?))?)';
@@ -56,19 +55,19 @@ export default class DurationTypeReader extends AbstractTypeReader {
         return duration;
     }
 
-    public GetTypes(): any[] {
+    public getTypes(): any[] {
         return [DurationParam];
     }
 
     // @ts-ignore
-    public Read(client: Client, context: CommandContext, input: string): TypeReaderResult {
+    public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         try {
-            const duration: moment.Duration = DurationTypeReader.ParseDuration(input);
+            const duration: moment.Duration = DurationTypeReader.parseDuration(input);
             if (moment.isDuration(duration)) {
-                return TypeReaderResult.FromSuccess(new TypeReaderValue(duration, 1.0));
+                return TypeReaderResult.fromSuccess(new TypeReaderValue(duration, 1.0));
             }
         } catch (error) {}
 
-        return TypeReaderResult.FromError(CommandError.ParseFailed, 'Unable to parse duration.');
+        return TypeReaderResult.fromError(CommandError.ParseFailed, 'Unable to parse duration.');
     }
 };

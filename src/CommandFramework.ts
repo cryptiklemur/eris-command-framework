@@ -1,16 +1,15 @@
 import {Container} from 'inversify';
 import {createLogger, format, Logger} from 'winston';
+
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandHandler from './CommandHandler';
 import CommandParser from './CommandParser';
 import CommandService from './CommandService';
-
 import Configuration from './Configuration';
 import Permission from './Entity/Permission';
 import {Interfaces} from './Interfaces';
 import Authorizer from './Security/Authorizer';
 import Types from './types';
-import PluginInterface = Interfaces.PluginInterface;
 
 export default class CommandFramework {
     constructor(
@@ -18,43 +17,43 @@ export default class CommandFramework {
         configuration: Configuration,
         private plugins: { [name: string]: Interfaces.PluginInterface } = {},
     ) {
-        container.bind<Configuration>(Types.Configuration).toConstantValue(configuration);
-        if (!container.isBound(Types.Logger)) {
-            container.bind<Logger>(Types.Logger).toConstantValue(createLogger({
+        container.bind<Configuration>(Types.configuration).toConstantValue(configuration);
+        if (!container.isBound(Types.logger)) {
+            container.bind<Logger>(Types.logger).toConstantValue(createLogger({
                 level:      'info',
                 format:     format.combine(
                     format.json(),
-                    format.splat()
+                    format.splat(),
                 ),
                 transports: [],
             }));
         }
 
-        container.bind<MessageBuffer>(Types.MessageBuffer).to(MessageBuffer);
-        container.bind<CommandService>(Types.Command.Service).to(CommandService);
-        container.bind<CommandHandler>(Types.Command.Handler).to(CommandHandler);
-        container.bind<CommandParser>(Types.Command.Parser).to(CommandParser);
-        container.bind<Authorizer>(Types.Security.Authorizer).to(Authorizer);
+        container.bind<MessageBuffer>(Types.messageBuffer).to(MessageBuffer);
+        container.bind<CommandService>(Types.command.service).to(CommandService);
+        container.bind<CommandHandler>(Types.command.handler).to(CommandHandler);
+        container.bind<CommandParser>(Types.command.parser).to(CommandParser);
+        container.bind<Authorizer>(Types.security.authorizer).to(Authorizer);
     }
 
-    public async Initialize(): Promise<void> {
+    public async initialize(): Promise<void> {
         for (const name of Object.keys(this.plugins)) {
-            const plugin: PluginInterface = this.plugins[name];
-            this.container.bind<Interfaces.PluginInterface>(Types.Plugin).to(plugin as any).whenTargetNamed(name);
-            (plugin as any).AddToContainer(this.container);
+            const plugin: Interfaces.PluginInterface = this.plugins[name];
+            this.container.bind<Interfaces.PluginInterface>(Types.plugin).to(plugin as any).whenTargetNamed(name);
+            (plugin as any).addToContainer(this.container);
         }
 
-        await this.container.get<Authorizer>(Types.Security.Authorizer).Initialize();
-        await this.container.get<CommandService>(Types.Command.Service).Initialize(this.plugins);
-        await this.container.get<CommandHandler>(Types.Command.Handler).Install();
+        await this.container.get<Authorizer>(Types.security.authorizer).initialize();
+        await this.container.get<CommandService>(Types.command.service).initialize(this.plugins);
+        await this.container.get<CommandHandler>(Types.command.handler).install();
     }
 
-    public GetEntities(): any[] {
+    public getEntities(): any[] {
         const pluginEntities = [];
         for (const name of Object.keys(this.plugins)) {
             const plugin = this.plugins[name];
 
-            pluginEntities.push(...(plugin as any).GetEntities());
+            pluginEntities.push(...(plugin as any).getEntities());
         }
 
         return [

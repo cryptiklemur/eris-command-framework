@@ -11,77 +11,77 @@ import PluginInterface = Interfaces.PluginInterface;
 const re: RegExp = /(\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s*=*('(?:\\'|[^'\r\n])*'))/mg;
 
 export default class CommandInfo implements CommandInterface {
-    public Plugin: PluginInterface;
+    public plugin: PluginInterface;
 
-    public Aliases: string[] = [];
+    public aliases: string[] = [];
 
-    public ShortDescription?: string;
+    public shortDescription?: string;
 
-    public LongDescription?: string;
+    public longDescription?: string;
 
-    public Syntax?: string = '';
+    public syntax?: string = '';
 
-    public PermissionNode?: string = null;
+    public permissionNode?: string = null;
 
-    public PermissionStrict: boolean = false;
+    public permissionStrict: boolean = false;
 
-    public Parameters: ParameterInfo[] = [];
+    public parameters: ParameterInfo[] = [];
 
-    public Code: Function;
+    public code: Function;
 
-    public Types: Object = {};
+    public types: Object = {};
 
-    public RemainderField: number = undefined;
+    public remainderField: number = undefined;
 
-    public RequiredFields: number[] = [];
+    public requiredFields: number[] = [];
 
     constructor(init?: Partial<CommandInterface>) {
         Object.assign(this, init);
 
-        this.Initialize();
+        this.initialize();
     }
 
-    public get Name(): string {
-        return this.Aliases[0];
+    public get name(): string {
+        return this.aliases[0];
     }
 
-    public async ExecuteCommandAsync(context: CommandContext, parseResult: ParseResult): Promise<ExecuteResult> {
-        this.Plugin.Context    = context;
+    public async executeCommandAsync(context: CommandContext, parseResult: ParseResult): Promise<ExecuteResult> {
+        this.plugin.context    = context;
         const argList: any[]   = [];
         const paramList: any[] = [];
         for (let i = 0; i < parseResult.argValues.length; i++) {
-            if (!parseResult.argValues[i].IsSuccess) {
-                return ExecuteResult.FromResult(parseResult.argValues[i]);
+            if (!parseResult.argValues[i].isSuccess) {
+                return ExecuteResult.fromResult(parseResult.argValues[i]);
             }
-            argList[i] = parseResult.argValues[i].Values[0].Value;
+            argList[i] = parseResult.argValues[i].values[0].Value;
         }
         for (let i = 0; i < parseResult.paramValues.length; i++) {
-            if (!parseResult.paramValues[i].IsSuccess) {
-                return ExecuteResult.FromResult(parseResult.paramValues[i]);
+            if (!parseResult.paramValues[i].isSuccess) {
+                return ExecuteResult.fromResult(parseResult.paramValues[i]);
             }
-            paramList[i] = parseResult.paramValues[i].Values[0].Value;
+            paramList[i] = parseResult.paramValues[i].values[0].Value;
         }
 
-        const hasVarArgs: boolean = this.Parameters.length > 0
-                                    ? this.Parameters[this.Parameters.length - 1].IsMultiple : false;
-        const argCount: number    = this.Parameters.length - (hasVarArgs ? 1 : 0);
+        const hasVarArgs: boolean = this.parameters.length > 0
+                                    ? this.parameters[this.parameters.length - 1].isMultiple : false;
+        const argCount: number    = this.parameters.length - (hasVarArgs ? 1 : 0);
         const args: any[]         = [];
 
         let i: number = 0;
         for (let arg of argList) {
             if (i === argCount) {
-                return ExecuteResult.FromError(
+                return ExecuteResult.fromError(
                     CommandError.BadArgCount,
-                    'Command was invoked with too many parameters',
+                    'command was invoked with too many parameters',
                 );
             }
             args[i++] = arg;
         }
 
         if (i < argCount) {
-            return ExecuteResult.FromError(
+            return ExecuteResult.fromError(
                 CommandError.BadArgCount,
-                'Command was invoked with too few parameters',
+                'command was invoked with too few parameters',
             );
         }
 
@@ -90,21 +90,21 @@ export default class CommandInfo implements CommandInterface {
         }
 
         try {
-            await this.Code.apply(this.Plugin, args);
+            await this.code.apply(this.plugin, args);
 
-            return ExecuteResult.FromSuccess();
+            return ExecuteResult.fromSuccess();
         } catch (error) {
-            return ExecuteResult.FromException(error);
+            return ExecuteResult.fromException(error);
         }
     }
 
-    private Initialize(): void {
-        this.BuildParameters();
-        this.BuildSyntax();
+    private initialize(): void {
+        this.buildParameters();
+        this.buildSyntax();
     }
 
-    private BuildParameters(): void {
-        const names: string[] = this.GetParameters();
+    private buildParameters(): void {
+        const names: string[] = this.getParameters();
         for (let index: number = 0; index < names.length; index++) {
             if (!names.hasOwnProperty(index)) {
                 continue;
@@ -121,18 +121,18 @@ export default class CommandInfo implements CommandInterface {
 
             const param: ParameterInfo = new ParameterInfo(
                 cleanName,
-                this.Types[cleanName],
-                this.RemainderField !== undefined && this.RemainderField === index,
+                this.types[cleanName],
+                this.remainderField !== undefined && this.remainderField === index,
                 name.indexOf('...') === 0,
                 defaultValue,
             );
-            this.Parameters.push(param);
+            this.parameters.push(param);
         }
     }
 
-    private GetParameters(): string[] {
+    private getParameters(): string[] {
         const paramsRegex: RegExp      = /^(?:async )?[A-Za-z]+\(([A-Za-z0-9-_+."'\/*,\s=]+)?\)\s+{/m;
-        const code: string             = this.Code.toString().replace(re, '');
+        const code: string             = this.code.toString().replace(re, '');
         const result: RegExpMatchArray = code.match(paramsRegex);
         if (!result || !result[1]) {
             return [];
@@ -157,25 +157,25 @@ export default class CommandInfo implements CommandInterface {
         return paramArray;
     }
 
-    private BuildSyntax(): void {
+    private buildSyntax(): void {
         const message: StringBuilder = new StringBuilder();
-        message.Append(`{prefix}${this.Name} `);
-        for (let parameter of this.Parameters) {
-            message.Append('<');
-            if (parameter.IsMultiple || parameter.Remainder) {
-                message.Append('...');
+        message.append(`{prefix}${this.name} `);
+        for (let parameter of this.parameters) {
+            message.append('<');
+            if (parameter.isMultiple || parameter.remainder) {
+                message.append('...');
             }
-            message.Append(parameter.Name);
-            if (parameter.IsOptional) {
-                message.Append('?');
+            message.append(parameter.name);
+            if (parameter.isOptional) {
+                message.append('?');
             }
-            if (parameter.DefaultValue !== undefined && parameter.DefaultValue !== null) {
-                message.Append('=' + JSON.stringify(parameter.DefaultValue));
+            if (parameter.defaultValue !== undefined && parameter.defaultValue !== null) {
+                message.append('=' + JSON.stringify(parameter.defaultValue));
             }
 
-            message.Append('> ');
+            message.append('> ');
         }
 
-        this.Syntax = message.toString().trim();
+        this.syntax = message.toString().trim();
     }
 };

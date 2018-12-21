@@ -1,18 +1,18 @@
 const Types = {
-    Command:       {
-        Handler: Symbol('Command.Handler'),
-        Parser:  Symbol('Command.Parser'),
-        Service: Symbol('Command.Service'),
+    command:       {
+        handler: Symbol('command.handler'),
+        parser:  Symbol('command.parser'),
+        service: Symbol('command.service'),
     },
-    Configuration: Symbol('Configuration'),
-    Connection:    Symbol('Connection'),
-    DiscordClient: Symbol('DiscordClient'),
-    Environment:   Symbol('Environment'),
-    Logger:        Symbol('Logger'),
-    MessageBuffer: Symbol('MessageBuffer'),
-    Plugin:        Symbol('Plugin'),
-    Security:      {
-        Authorizer: Symbol('Security.Authorizer'),
+    configuration: Symbol('configuration'),
+    connection:    Symbol('Connection'),
+    discordClient: Symbol('discordClient'),
+    environment:   Symbol('environment'),
+    logger:        Symbol('logger'),
+    messageBuffer: Symbol('messageBuffer'),
+    plugin:        Symbol('Plugin'),
+    security:      {
+        authorizer: Symbol('security.authorizer'),
     },
 };
 

@@ -1,12 +1,14 @@
-import {JsonProperty} from "json-typescript-mapper";
+import {JsonProperty} from 'json-typescript-mapper';
 
 export default class EmbedVideo {
-    @JsonProperty("url")
-    public Url: string = null;
-    @JsonProperty("height")
-    public Height: number = null;
-    @JsonProperty("width")
-    public Width: number = null;
+    @JsonProperty('url')
+    public url: string = null;
+
+    @JsonProperty('height')
+    public height: number = null;
+
+    @JsonProperty('width')
+    public width: number = null;
 
     constructor(init?: Partial<EmbedVideo>) {
         Object.assign(this, init);

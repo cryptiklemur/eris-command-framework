@@ -1,13 +1,13 @@
 export default class ParameterInfo {
-    public IsOptional: boolean = false;
+    public isOptional: boolean = false;
 
     constructor(
-        public Name: string,
-        public Type: any,
-        public Remainder: boolean  = false,
-        public IsMultiple: boolean = false,
-        public DefaultValue: any   = undefined,
+        public name: string,
+        public type: any,
+        public remainder: boolean  = false,
+        public isMultiple: boolean = false,
+        public defaultValue: any   = undefined,
     ) {
-        this.IsOptional = DefaultValue === null;
+        this.isOptional = defaultValue === null;
     }
 };

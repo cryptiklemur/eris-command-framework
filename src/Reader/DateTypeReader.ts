@@ -8,18 +8,16 @@ import TypeReaderValue from '../Result/TypeReaderValue';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class DateTypeReader extends AbstractTypeReader {
-    public GetTypes(): any[] {
+    public getTypes(): any[] {
         return [Date];
     }
 
     // @ts-ignore
-    public Read(client: Client, context: CommandContext, input: string): TypeReaderResult {
+    public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         try {
-            console.log(input, chrono.parseDate(input, Date.now()));
-
-            return TypeReaderResult.FromSuccess(new TypeReaderValue(chrono.parseDate(input, Date.now()), 1.0));
+            return TypeReaderResult.fromSuccess(new TypeReaderValue(chrono.parseDate(input, Date.now()), 1.0));
         } catch (error) {}
 
-        return TypeReaderResult.FromError(CommandError.ParseFailed, 'Unable to parse duration.');
+        return TypeReaderResult.fromError(CommandError.ParseFailed, 'Unable to parse duration.');
     }
 };

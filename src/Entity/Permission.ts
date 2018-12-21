@@ -10,22 +10,22 @@ export class Permission extends BaseEntity {
     public static PermissionType = PermissionType;
 
     @PrimaryGeneratedColumn()
-    public Id: number;
+    public id: number;
 
     @Column({type: 'bigint'}) @Index('guild', ['GuildID'])
-    public GuildId: string;
+    public guildId: string;
 
-    @Column({length: 512}) @Index('node', ['Node'])
-    public Node: string;
+    @Column({length: 512}) @Index('node', ['node'])
+    public node: string;
 
-    @Column() @Index('type', ['Type'])
-    public Type: PermissionType;
+    @Column() @Index('type', ['type'])
+    public type: PermissionType;
 
-    @Column({type: 'bigint'}) @Index('type_id', ['TypeId'])
-    public TypeId: string;
+    @Column({type: 'bigint'}) @Index('type_id', ['typeId'])
+    public typeId: string;
 
-    @Column() @Index('allowed', ['Allowed'])
-    public Allowed: boolean = true;
+    @Column() @Index('allowed', ['allowed'])
+    public allowed: boolean = true;
 
     public constructor(init?: Partial<Permission>) {
         super();

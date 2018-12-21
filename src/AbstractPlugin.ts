@@ -10,22 +10,21 @@ import Configuration from './Configuration';
 import {Interfaces} from './Interfaces';
 import Embed from './Model/Embed';
 import TYPES from './types';
-import PluginInterface = Interfaces.PluginInterface;
 
 @injectable()
-abstract class AbstractPlugin implements PluginInterface {
+export default abstract class AbstractPlugin implements Interfaces.PluginInterface {
     public static Name: string;
     public static Config: any = {};
 
-    public static AddToContainer(container: Container): void {
-        throw new Error('Plugin must implement AddToContainer, even if its empty.');
+    public static addToContainer(container: Container): void {
+        throw new Error('plugin must implement addToContainer, even if its empty.');
     }
 
-    public static GetEntities(): any[] {
-        throw new Error('Plugin must implement GetEntities, even if its empty.');
+    public static getEntities(): any[] {
+        throw new Error('plugin must implement getEntities, even if its empty.');
     }
 
-    protected static RGBToHex(r: number, g: number, b: number): number {
+    protected static rgbToHex(r: number, g: number, b: number): number {
         let num: string = '0x';
         num += [r, g, b].map(
             (x) => {
@@ -39,82 +38,80 @@ abstract class AbstractPlugin implements PluginInterface {
     }
 
     protected get prefix() {
-        return this.Configuration.prefix;
+        return this.configuration.prefix;
     }
 
-    @inject(TYPES.DiscordClient)
-    public Client: Client;
+    @inject(TYPES.discordClient)
+    public client: Client;
 
-    @inject(TYPES.Configuration)
-    public Configuration: Configuration;
+    @inject(TYPES.configuration)
+    public configuration: Configuration;
 
-    @inject(TYPES.MessageBuffer)
-    public MessageBuffer: MessageBuffer;
+    @inject(TYPES.messageBuffer)
+    public messageBuffer: MessageBuffer;
 
-    @inject(TYPES.Connection)
-    public Database: Connection;
+    @inject(TYPES.connection)
+    public database: Connection;
 
-    @inject(TYPES.Logger)
-    public Logger: Logger;
+    @inject(TYPES.logger)
+    public logger: Logger;
 
-    public Context: CommandContext;
+    public context: CommandContext;
 
-    public async Initialize(): Promise<void> {
+    public async initialize(): Promise<void> {
     }
 
-    protected GetDefaultColor(): number {
-        return AbstractPlugin.RGBToHex(66, 139, 202);
+    protected getDefaultColor(): number {
+        return AbstractPlugin.rgbToHex(66, 139, 202);
     }
 
-    protected async ReactOk(): Promise<void> {
-        return this.Context.Message.addReaction('👍🏻');
+    protected async reactOk(): Promise<void> {
+        return this.context.Message.addReaction('👍🏻');
     }
 
-    protected async ReactNotOk(): Promise<void> {
-        return this.Context.Message.addReaction('👎🏻');
+    protected async reactNotOk(): Promise<void> {
+        return this.context.Message.addReaction('👎🏻');
     }
 
-    protected async Reply(content: string): Promise<void> {
-        await this.SendMessage(this.Context.Channel, content);
+    protected async reply(content: string): Promise<void> {
+        await this.sendMessage(this.context.channel, content);
     }
 
-    protected async SendMessage(channel: TextableChannel, content: string): Promise<void> {
-        this.MessageBuffer.AddItem(channel, content);
+    protected async sendMessage(channel: TextableChannel, content: string): Promise<void> {
+        this.messageBuffer.addItem(channel, content);
     }
 
-    protected async SendEmbed(embed: Embed): Promise<void> {
+    protected async sendEmbed(embed: Embed): Promise<void> {
         try {
-            let jsonEmbed: any = embed.Serialize();
-            this.Logger.info('Creating embed: %j', jsonEmbed);
+            let jsonEmbed: any = embed.serialize();
+            this.logger.info('Creating embed: %j', jsonEmbed);
 
-            await this.Context.Channel.createMessage({embed: jsonEmbed});
+            await this.context.channel.createMessage({embed: jsonEmbed});
         } catch (error) {
-            this.Logger.error('Error sending message: %s', error.response);
+            this.logger.error('error sending approvalMessage: %s', error.response);
             throw error;
         }
     }
 
-    protected async EmbedMessage(action: ((x: Embed) => any)): Promise<void> {
+    protected async embedMessage(action: ((x: Embed) => any)): Promise<void> {
         const embed: Embed = new Embed(
             {
-                Author:    {
-                    IconUrl: this.Client.user.avatarURL,
-                    Name:    this.Client.user.username,
+                author:    {
+                    iconUrl: this.client.user.avatarURL,
+                    name:    this.client.user.username,
                 },
-                Color:     this.GetDefaultColor(),
-                Fields:    [],
-                Timestamp: moment().utc().toDate(),
+                color:     this.getDefaultColor(),
+                fields:    [],
+                timestamp: moment().utc().toDate(),
             },
         );
 
         action(embed);
 
-        return await this.SendEmbed(embed);
+        return await this.sendEmbed(embed);
     }
 
-    protected GetRepository<T>(entityClass: any): Repository<T> {
-        return this.Database.getRepository<T>(entityClass) as Repository<T>;
+    protected getRepository<T>(entityClass: any): Repository<T> {
+        return this.database.getRepository<T>(entityClass) as Repository<T>;
     }
 }
-
-export default AbstractPlugin;

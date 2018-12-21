@@ -1,5 +1,6 @@
 import {EmbedOptions} from 'eris';
 import {IDecoratorMetaData, JsonProperty} from 'json-typescript-mapper';
+
 import EmbedAuthor from './EmbedAuthor';
 import EmbedField from './EmbedField';
 import EmbedFooter from './EmbedFooter';
@@ -22,65 +23,70 @@ function isArrayOrArrayClass(clazz: Function): boolean {
 
 export default class Embed {
     @JsonProperty('title')
-    public Title: string;
+    public title: string;
+
     @JsonProperty('type')
-    public Type: string;
+    public type: string;
+
     @JsonProperty('description')
-    public Description: string;
+    public description: string;
+
     @JsonProperty('url')
-    public Url: string;
+    public url: string;
+
     @JsonProperty('color')
-    public Color?: number;
+    public color?: number;
+
     @JsonProperty('timestamp')
-    public Timestamp?: Date;
+    public timestamp?: Date;
 
     @JsonProperty({name: 'author', clazz: EmbedAuthor})
-    public Author: EmbedAuthor = new EmbedAuthor();
+    public author: EmbedAuthor = new EmbedAuthor();
 
     @JsonProperty({name: 'footer', clazz: EmbedFooter})
-    public Footer: EmbedFooter = new EmbedFooter();
+    public footer: EmbedFooter = new EmbedFooter();
 
     @JsonProperty({name: 'video', clazz: EmbedVideo})
-    public Video: EmbedVideo = new EmbedVideo();
+    public video: EmbedVideo = new EmbedVideo();
 
     @JsonProperty({name: 'thumbnail', clazz: EmbedThumbnail})
-    public Thumbnail: EmbedThumbnail = new EmbedThumbnail();
+    public thumbnail: EmbedThumbnail = new EmbedThumbnail();
 
     @JsonProperty({name: 'image', clazz: EmbedImage})
-    public Image: EmbedImage = new EmbedImage();
+    public image: EmbedImage = new EmbedImage();
 
     @JsonProperty({name: 'provider', clazz: EmbedProvider})
-    public Provider: EmbedProvider = new EmbedProvider();
+    public provider: EmbedProvider = new EmbedProvider();
 
     @JsonProperty({name: 'fields', clazz: EmbedField})
-    public Fields: EmbedField[] = [];
+    public fields: EmbedField[] = [];
 
     public constructor(init?: Partial<Embed>) {
         Object.assign(this, init);
     }
 
-    public WithField(action: (field: EmbedField) => void): Embed {
+    public withField(action: (field: EmbedField) => void): Embed {
         const embedField: EmbedField = new EmbedField();
         action(embedField);
 
-        this.Fields.push(embedField);
+        this.fields.push(embedField);
 
         return this;
     }
 
-    public WithColor(color: number): Embed {
-        this.Color = color;
+    public withColor(color: number): Embed {
+        this.color = color;
 
         return this;
     }
 
-    public WithTitle(title: string): Embed {
-        this.Title = title;
+    public withTitle(title: string): Embed {
+        this.title = title;
 
         return this;
     }
 
-    public Serialize(): EmbedOptions {
+    public serialize(): EmbedOptions {
         function serialize(instance: any): any {
             if (!isTargetType(instance, 'object') || isArrayOrArrayClass(instance)) {
                 return instance;
@@ -121,13 +127,13 @@ export default class Embed {
             return serialize(prop);
         }
 
-        this.Author    = this.Author instanceof EmbedAuthor ? this.Author : new EmbedAuthor(this.Author);
-        this.Footer    = this.Footer instanceof EmbedFooter ? this.Footer : new EmbedFooter(this.Footer);
-        this.Image     = this.Image instanceof EmbedImage ? this.Image : new EmbedImage(this.Image);
-        this.Provider  = this.Provider instanceof EmbedProvider ? this.Provider : new EmbedProvider(this.Provider);
-        this.Thumbnail = this.Thumbnail instanceof EmbedThumbnail ? this.Thumbnail : new EmbedThumbnail(this.Thumbnail);
-        this.Video     = this.Video instanceof EmbedVideo ? this.Video : new EmbedVideo(this.Video);
-        this.Fields    = this.Fields.map((f: EmbedField) => f instanceof EmbedField ? f : new EmbedField(f));
+        this.author    = this.author instanceof EmbedAuthor ? this.author : new EmbedAuthor(this.author);
+        this.footer    = this.footer instanceof EmbedFooter ? this.footer : new EmbedFooter(this.footer);
+        this.image     = this.image instanceof EmbedImage ? this.image : new EmbedImage(this.image);
+        this.provider  = this.provider instanceof EmbedProvider ? this.provider : new EmbedProvider(this.provider);
+        this.thumbnail = this.thumbnail instanceof EmbedThumbnail ? this.thumbnail : new EmbedThumbnail(this.thumbnail);
+        this.video     = this.video instanceof EmbedVideo ? this.video : new EmbedVideo(this.video);
+        this.fields    = this.fields.map((f: EmbedField) => f instanceof EmbedField ? f : new EmbedField(f));
 
         return serialize(this);
     }

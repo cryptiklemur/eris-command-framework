@@ -10,20 +10,20 @@ export default class StringBuilder {
     constructor(private _items: string[] = []) {
     }
 
-    public Append(...strings: string[]): StringBuilder {
+    public append(...strings: string[]): StringBuilder {
         strings.forEach((s) => this._items.push(s));
 
         return this;
     }
 
-    public AppendLine(...strings: string[]): StringBuilder {
+    public appendLine(...strings: string[]): StringBuilder {
         strings.forEach((s) => this._items.push(s));
         this._items.push('\n');
 
         return this;
     }
 
-    public Clear(): StringBuilder {
+    public clear(): StringBuilder {
         this.length = 0;
 
         return this;

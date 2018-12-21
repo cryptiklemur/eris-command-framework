@@ -7,11 +7,11 @@ import AbstractTypeReader from './AbstractTypeReader';
 
 export default class ArrayTypeReader extends AbstractTypeReader {
     // @ts-ignore
-    public Read(client: Client, context: CommandContext, input: string): TypeReaderResult {
-        return TypeReaderResult.FromSuccess([new TypeReaderValue(input.split(' '), 0.90)]);
+    public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
+        return TypeReaderResult.fromSuccess([new TypeReaderValue(input.split(' '), 0.90)]);
     }
 
-    public GetTypes(): any[] {
+    public getTypes(): any[] {
         return [Array];
     }
 };

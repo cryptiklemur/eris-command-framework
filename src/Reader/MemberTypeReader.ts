@@ -8,36 +8,36 @@ import TypeReaderValue from '../Result/TypeReaderValue';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class MemberTypeReader extends AbstractTypeReader {
-    private static AddResult(results: Dictionary<string, TypeReaderValue>, user: Member, score: number): void {
+    private static addResult(results: Dictionary<string, TypeReaderValue>, user: Member, score: number): void {
         if (user && !results.containsKey(user.id)) {
             results.setValue(user.id, new TypeReaderValue(user, score));
         }
     }
 
-    public GetTypes(): any[] {
+    public getTypes(): any[] {
         return [Member];
     }
 
     // @ts-ignore
-    public Read(client: Client, context: CommandContext, input: string): TypeReaderResult {
+    public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         const results: Dictionary<string, TypeReaderValue> = new Dictionary<string, TypeReaderValue>();
 
-        if (!context.Guild) {
-            return TypeReaderResult.FromError(CommandError.ObjectNotFound, 'Not in Guild context.');
+        if (!context.guild) {
+            return TypeReaderResult.fromError(CommandError.ObjectNotFound, 'Not in guild context.');
         }
 
-        const guildUsers: Collection<Member> = context.Guild.members;
+        const guildUsers: Collection<Member> = context.guild.members;
 
         // By Mention (1.0)
         let mentionRegex: RegExp = /^<@!?(\d+)>$/;
         if (mentionRegex.test(input)) {
-            MemberTypeReader.AddResult(results, guildUsers.find((x) => x.id === mentionRegex.exec(input)[1]), 1.00);
+            MemberTypeReader.addResult(results, guildUsers.find((x) => x.id === mentionRegex.exec(input)[1]), 1.00);
         }
 
         // By ID (0.9)
         let idRegex: RegExp = /^(\d+)$/;
         if (idRegex.test(input)) {
-            MemberTypeReader.AddResult(results, guildUsers.find((x) => x.id === input), 0.90);
+            MemberTypeReader.addResult(results, guildUsers.find((x) => x.id === input), 0.90);
         }
 
         // By Username + Discrim (0.7-0.85)
@@ -51,24 +51,24 @@ export default class MemberTypeReader extends AbstractTypeReader {
             );
 
             if (guildUser) {
-                MemberTypeReader.AddResult(results, guildUser, guildUser.username === username ? 0.85 : 0.75);
+                MemberTypeReader.addResult(results, guildUser, guildUser.username === username ? 0.85 : 0.75);
             }
         }
 
         // By Username (0.5-0.65)
         for (let user of guildUsers.filter((x) => x.username.toLowerCase() === input.toLowerCase())) {
-            MemberTypeReader.AddResult(results, user, user.username === input ? 0.65 : 0.55);
+            MemberTypeReader.addResult(results, user, user.username === input ? 0.65 : 0.55);
         }
 
         // By Nickname (0.5-0.65)
-        for (let user of context.Guild.members.filter((x) => x.nick && x.nick.toLowerCase() === input.toLowerCase())) {
-            MemberTypeReader.AddResult(results, user, user.username === input ? 0.65 : 0.55);
+        for (let user of context.guild.members.filter((x) => x.nick && x.nick.toLowerCase() === input.toLowerCase())) {
+            MemberTypeReader.addResult(results, user, user.username === input ? 0.65 : 0.55);
         }
 
         if (results.size() > 0) {
-            return TypeReaderResult.FromSuccess(results.values());
+            return TypeReaderResult.fromSuccess(results.values());
         }
 
-        return TypeReaderResult.FromError(CommandError.ObjectNotFound, 'User not found.');
+        return TypeReaderResult.fromError(CommandError.ObjectNotFound, 'user not found.');
     }
 };

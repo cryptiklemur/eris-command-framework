@@ -1,12 +1,14 @@
-import {JsonProperty} from "json-typescript-mapper";
+import {JsonProperty} from 'json-typescript-mapper';
 
 export default class EmbedField {
-    @JsonProperty("name")
-    public Name: string;
-    @JsonProperty("value")
-    public Value: string;
-    @JsonProperty("inline")
-    public Inline?: boolean = false;
+    @JsonProperty('name')
+    public name: string;
+
+    @JsonProperty('value')
+    public value: string;
+
+    @JsonProperty('inline')
+    public inline?: boolean = false;
 
     constructor(init?: Partial<EmbedField>) {
         Object.assign(this, init);

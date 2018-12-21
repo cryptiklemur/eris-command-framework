@@ -6,7 +6,7 @@ enum CommandError {
     ParseFailed,
     BadArgCount,
 
-    // Parse (Type Reader)
+    // Parse (type reader)
     // CastFailed,
     ObjectNotFound,
     MultipleMatches,

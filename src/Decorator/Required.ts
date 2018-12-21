@@ -1,14 +1,13 @@
 import {Interfaces} from '../Interfaces';
-import CommandInterface = Interfaces.CommandInterface;
 
 export default (target: any, propertyKey: string, parameterIndex: number) => {
-    const metadata: CommandInterface = Reflect.getOwnMetadata('command', target, propertyKey) || {};
+    const metadata: Interfaces.CommandInterface = Reflect.getOwnMetadata('command', target, propertyKey) || {};
 
-    if (!Array.isArray(metadata.RequiredFields)) {
-        metadata.RequiredFields = [];
+    if (!Array.isArray(metadata.requiredFields)) {
+        metadata.requiredFields = [];
     }
 
-    metadata.RequiredFields.push(parameterIndex);
+    metadata.requiredFields.push(parameterIndex);
 
     Reflect.defineMetadata('command', metadata, target, propertyKey);
 };

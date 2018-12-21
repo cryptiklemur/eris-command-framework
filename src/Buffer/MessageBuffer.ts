@@ -4,11 +4,11 @@ import ChannelBuffer from './ChannelBuffer';
 
 @injectable()
 export default class MessageBuffer {
-    private readonly _buffers: Array<ChannelBuffer<string>> = [];
+    private readonly buffers: Array<ChannelBuffer<string>> = [];
 
-    public AddItem(channel: TextableChannel, message: string): void {
-        if (!this._buffers[channel.id]) {
-            this._buffers[channel.id] = new ChannelBuffer<string>(
+    public addItem(channel: TextableChannel, message: string): void {
+        if (!this.buffers[channel.id]) {
+            this.buffers[channel.id] = new ChannelBuffer<string>(
                 channel,
                 async (chl, messages) => {
                     let builder: string = '';
@@ -26,6 +26,6 @@ export default class MessageBuffer {
             );
         }
 
-        this._buffers[channel.id].addItem(message);
+        this.buffers[channel.id].addItem(message);
     }
 };

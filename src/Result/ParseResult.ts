@@ -12,7 +12,7 @@ export default class ParseResult implements ResultInterface {
                 continue;
             }
 
-            if (argValues[i].Values.length > 1) {
+            if (argValues[i].values.length > 1) {
                 return new ParseResult(argValues, paramValues, CommandError.MultipleMatches, 'Multiple matches found.');
             }
         }
@@ -21,7 +21,7 @@ export default class ParseResult implements ResultInterface {
                 continue;
             }
 
-            if (paramValues[i].Values.length > 1) {
+            if (paramValues[i].values.length > 1) {
                 return new ParseResult(argValues, paramValues, CommandError.MultipleMatches, 'Multiple matches found.');
             }
         }
@@ -34,12 +34,12 @@ export default class ParseResult implements ResultInterface {
     ): ParseResult {
         const argList: TypeReaderResult[] = [];
         for (let i = 0; i < argValues.length; i++) {
-            argList[i] = TypeReaderResult.FromSuccess(argValues[i]);
+            argList[i] = TypeReaderResult.fromSuccess(argValues[i]);
         }
         let paramList: TypeReaderResult[] = [];
         if (paramValues) {
             for (let i = 0; i < paramValues.length; i++) {
-                paramList[i] = TypeReaderResult.FromSuccess(paramValues[i]);
+                paramList[i] = TypeReaderResult.fromSuccess(paramValues[i]);
             }
         }
 
@@ -50,7 +50,7 @@ export default class ParseResult implements ResultInterface {
         return new ParseResult(null, null, error, reason);
     }
 
-    public IsSuccess: boolean;
+    public isSuccess: boolean;
 
     public Command: CommandInfo;
 
@@ -60,6 +60,6 @@ export default class ParseResult implements ResultInterface {
         public Error?: CommandError,
         public ErrorReason?: string,
     ) {
-        this.IsSuccess = !Error;
+        this.isSuccess = !Error;
     }
 };

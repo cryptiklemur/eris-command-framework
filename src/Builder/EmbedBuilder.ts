@@ -1,61 +1,61 @@
 import Embed from '../Model/Embed';
 
 export default class EmbedBuilder {
-    public get Title() {
-        return this._embed.Title;
+    public get title() {
+        return this.embed.title;
     }
 
-    public set Title(value: string) {
-        this._embed.Title = value;
+    public set title(value: string) {
+        this.embed.title = value;
     }
 
-    public get Description() {
-        return this._embed.Description;
+    public get description() {
+        return this.embed.description;
     }
 
-    public set Description(value: string) {
-        this._embed.Description = value;
+    public set description(value: string) {
+        this.embed.description = value;
     }
 
-    public get Url() {
-        return this._embed.Url;
+    public get url() {
+        return this.embed.url;
     }
 
-    public set Url(value: string) {
-        this._embed.Url = value;
+    public set url(value: string) {
+        this.embed.url = value;
     }
 
-    public get ThumbnailUrl() {
-        return this._embed.Thumbnail.Url;
+    public get thumbnailUrl() {
+        return this.embed.thumbnail.url;
     }
 
-    public set ThumbnailUrl(value: string) {
-        this._embed.Thumbnail.Url = value;
+    public set thumbnailUrl(value: string) {
+        this.embed.thumbnail.url = value;
     }
 
-    public get ImageUrl() {
-        return this._embed.Image.Url;
+    public get imageUrl() {
+        return this.embed.image.url;
     }
 
-    public set ImageUrl(value: string) {
-        this._embed.Image.Url = value;
+    public set imageUrl(value: string) {
+        this.embed.image.url = value;
     }
 
-    public get Timestamp() {
-        return this._embed.Timestamp;
+    public get timestamp() {
+        return this.embed.timestamp;
     }
 
-    public set Timestamp(value: Date) {
-        this._embed.Timestamp = value;
+    public set timestamp(value: Date) {
+        this.embed.timestamp = value;
     }
 
-    public get Color() {
-        return this._embed.Color;
+    public get color() {
+        return this.embed.color;
     }
 
-    public set Color(value: number) {
-        this._embed.Color = value;
+    public set color(value: number) {
+        this.embed.color = value;
     }
 
-    private readonly _embed: Embed = new Embed();
+    private readonly embed: Embed = new Embed();
 };

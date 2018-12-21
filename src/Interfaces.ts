@@ -7,35 +7,35 @@ import TypeReaderResult from './Result/TypeReaderResult';
 
 export namespace Interfaces {
     export interface PluginInterface {
-        Context: CommandContext;
+        context: CommandContext;
 
-        Initialize();
+        initialize();
     }
 
     export interface CommandInterface {
-        Plugin: PluginInterface;
-        Aliases: string[];
-        ShortDescription?: string;
-        LongDescription?: string;
-        Syntax?: string;
-        PermissionNode?: string;
-        PermissionStrict: boolean;
-        Parameters: ParameterInfo[];
-        Code: Function;
-        Types: Object;
-        RemainderField: number;
-        RequiredFields: number[];
+        plugin: PluginInterface;
+        aliases: string[];
+        shortDescription?: string;
+        longDescription?: string;
+        syntax?: string;
+        permissionNode?: string;
+        permissionStrict: boolean;
+        parameters: ParameterInfo[];
+        code: Function;
+        types: Object;
+        remainderField: number;
+        requiredFields: number[];
     }
 
     export interface TypeReaderInterface {
-        Read(client: Client, context: CommandContext, input: string): TypeReaderResult;
+        read(client: Client, context: CommandContext, input: string): TypeReaderResult;
 
-        GetTypes(): any[];
+        getTypes(): any[];
     }
 
     export interface ResultInterface {
-        Error?: CommandError;
-        ErrorReason?: string;
-        IsSuccess: boolean;
+        error?: CommandError;
+        errorReason?: string;
+        isSuccess: boolean;
     }
 }

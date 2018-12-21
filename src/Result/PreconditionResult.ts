@@ -1,19 +1,18 @@
 import CommandError from '../CommandError';
 import {Interfaces} from '../Interfaces';
-import ResultInterface = Interfaces.ResultInterface;
 
-export default class PreconditionResult implements ResultInterface {
-    public static FromSuccess(): PreconditionResult {
+export default class PreconditionResult implements Interfaces.ResultInterface {
+    public static fromSuccess(): PreconditionResult {
         return new PreconditionResult();
     }
 
-    public static FromError(error: CommandError, reason: string): PreconditionResult {
+    public static fromError(error: CommandError, reason: string): PreconditionResult {
         return new PreconditionResult(error, reason);
     }
 
-    public IsSuccess: boolean;
+    public isSuccess: boolean;
 
-    constructor(public Error?: CommandError, public ErrorReason?: string) {
-        this.IsSuccess = !Error;
+    constructor(public error?: CommandError, public errorReason?: string) {
+        this.isSuccess = !error;
     }
 };

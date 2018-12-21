@@ -14,9 +14,9 @@ import TYPES from './types';
 
 @injectable()
 export default class CommandService {
-    private static GetMessageStart(input: string, command: CommandInfo) {
+    private static getMessageStart(input: string, command: CommandInfo) {
         let start = 0;
-        for (let alias of command.Aliases) {
+        for (let alias of command.aliases) {
             if (input.startsWith(alias) && alias.length > start) {
                 start = alias.length;
             }
@@ -32,24 +32,25 @@ export default class CommandService {
     // tslint:disable-next-line
     private plugins: Dictionary<string, Interfaces.PluginInterface> = new Dictionary<string, Interfaces.PluginInterface>();
 
-    private commands: CommandInfo[]                                 = [];
+    private commands: CommandInfo[] = [];
 
     constructor(@inject('Container') private container: Container) {
-        this.authorizer    = container.get<Authorizer>(TYPES.Security.Authorizer);
-        this.commandParser = container.get<CommandParser>(TYPES.Command.Parser);
+        this.authorizer    = container.get<Authorizer>(TYPES.security.authorizer);
+        this.commandParser = container.get<CommandParser>(TYPES.command.parser);
     }
 
-    public async Initialize(plugins: { [name: string]: Interfaces.PluginInterface }): Promise<void> {
+    public async initialize(plugins: { [name: string]: Interfaces.PluginInterface }): Promise<void> {
         for (const name in plugins) {
             if (!plugins.hasOwnProperty(name)) {
                 continue;
             }
 
             const plugin: Interfaces.PluginInterface = this.container.getNamed<Interfaces.PluginInterface>(
-                TYPES.Plugin,
+                TYPES.plugin,
                 name,
             );
-            const prototype: any                     = Object.getPrototypeOf(plugin);
+            await plugin.initialize();
+            const prototype: any = Object.getPrototypeOf(plugin);
             this.plugins.setValue(name, plugin);
 
             const methods: string[] = Object.getOwnPropertyNames(prototype)
@@ -59,8 +60,8 @@ export default class CommandService {
                 (method) => {
                     const command: Interfaces.CommandInterface = Reflect.getMetadata('command', plugin, method);
                     if (command) {
-                        command.Plugin = plugin;
-                        command.Code   = plugin[method];
+                        command.plugin = plugin;
+                        command.code   = plugin[method];
 
                         this.commands.push(new CommandInfo(command));
                     }
@@ -75,37 +76,37 @@ export default class CommandService {
      * @param {number} messageStart
      * @returns {Promise<Interfaces.ResultInterface>}
      */
-    public async ExecuteAsync(context: CommandContext, messageStart: number = 0): Promise<Interfaces.ResultInterface> {
+    public async executeAsync(context: CommandContext, messageStart: number = 0): Promise<Interfaces.ResultInterface> {
         const input: string = context.Message.content.substr(messageStart).trim();
 
-        const searchResult: SearchResult = await this.SearchAsync(context, input);
-        if (!searchResult.IsSuccess) {
+        const searchResult: SearchResult = await this.searchAsync(context, input);
+        if (!searchResult.isSuccess) {
             return searchResult;
         }
 
         for (let command of searchResult.Commands) {
-            let preconditionResult: PreconditionResult = this.CheckPermissions(context, command);
-            if (!preconditionResult.IsSuccess) {
+            let preconditionResult: PreconditionResult = this.checkPermissions(context, command);
+            if (!preconditionResult.isSuccess) {
                 if (searchResult.Commands.length === 1) {
                     return preconditionResult;
                 }
                 continue;
             }
 
-            let parseResult: ParseResult = await this.commandParser.ParseAsync(
+            let parseResult: ParseResult = await this.commandParser.parseAsync(
                 context,
                 command,
-                messageStart + CommandService.GetMessageStart(input, command),
+                messageStart + CommandService.getMessageStart(input, command),
             );
             // this._logger.info("Parse result: ", parseResult);
-            if (!parseResult.IsSuccess) {
+            if (!parseResult.isSuccess) {
                 if (parseResult.Error === CommandError.MultipleMatches) {
                     parseResult = ParseResult.FromMultipleSuccess(
-                        parseResult.argValues.map((x) => x.Values.sort((a, b) => a.Score < b.Score ? 1 : -1)[0]),
+                        parseResult.argValues.map((x) => x.values.sort((a, b) => a.Score < b.Score ? 1 : -1)[0]),
                     );
                 }
 
-                if (!parseResult.IsSuccess) {
+                if (!parseResult.isSuccess) {
                     if (searchResult.Commands.length === 1) {
                         return parseResult;
                     }
@@ -114,24 +115,24 @@ export default class CommandService {
                 }
             }
 
-            return await command.ExecuteCommandAsync(context, parseResult);
+            return await command.executeCommandAsync(context, parseResult);
         }
 
         return searchResult;
     }
 
-    public HasPlugin(name: string): boolean {
+    public hasPlugin(name: string): boolean {
         return this.plugins.containsKey(name);
     }
 
     // @ts-ignore
-    public async SearchAsync(context: CommandContext, input?: string): Promise<SearchResult> {
+    public async searchAsync(context: CommandContext, input?: string): Promise<SearchResult> {
         let matches: CommandInfo[] = this.commands;
         if (input !== null && input !== undefined) {
             input   = input.toLocaleLowerCase();
             matches = matches.filter(
                 (x) => {
-                    for (let alias of x.Aliases) {
+                    for (let alias of x.aliases) {
                         if (input.startsWith(alias)) {
                             return true;
                         }
@@ -143,19 +144,19 @@ export default class CommandService {
         }
 
         return matches.length > 0
-               ? SearchResult.FromSuccess(input, matches)
-               : SearchResult.FromError(CommandError.UnknownCommand, 'Unknown command.');
+               ? SearchResult.fromSuccess(input, matches)
+               : SearchResult.fromError(CommandError.UnknownCommand, 'Unknown command.');
     }
 
-    private CheckPermissions(context: CommandContext, command: CommandInfo): PreconditionResult {
-        const authorized: boolean = this.authorizer.IsAuthorized(
-            command.PermissionNode,
-            context.Member || context.User,
-            command.PermissionStrict,
+    private checkPermissions(context: CommandContext, command: CommandInfo): PreconditionResult {
+        const authorized: boolean = this.authorizer.isAuthorized(
+            command.permissionNode,
+            context.member || context.user,
+            command.permissionStrict,
         );
 
         return authorized
-               ? PreconditionResult.FromSuccess()
-               : PreconditionResult.FromError(CommandError.UnmetPrecondition, 'Failed Permission Check');
+               ? PreconditionResult.fromSuccess()
+               : PreconditionResult.fromError(CommandError.UnmetPrecondition, 'Failed Permission Check');
     }
 };

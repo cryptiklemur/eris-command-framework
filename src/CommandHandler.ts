@@ -12,26 +12,26 @@ import ResultInterface = Interfaces.ResultInterface;
 
 @injectable()
 export default class CommandHandler {
-    @inject(TYPES.Configuration)
+    @inject(TYPES.configuration)
     private configuration: Configuration;
 
-    @inject(TYPES.DiscordClient)
+    @inject(TYPES.discordClient)
     private client: Client;
 
-    @inject(TYPES.Command.Service)
+    @inject(TYPES.command.service)
     private commands: CommandService;
 
-    @inject(TYPES.Logger)
+    @inject(TYPES.logger)
     private logger: LoggerInstance;
 
-    public Install(): void {
-        this.client.on('messageCreate', this.HandleCommand.bind(this));
+    public install(): void {
+        this.client.on('messageCreate', this.handleCommand.bind(this));
         if (this.configuration.onMessageUpdate) {
-            this.client.on('messageUpdate', this.HandleCommand.bind(this));
+            this.client.on('messageUpdate', this.handleCommand.bind(this));
         }
     }
 
-    private async HandleCommand(message: Message): Promise<void> {
+    private async handleCommand(message: Message): Promise<void> {
         if (!message || !message.author || message.author.id === this.client.user.id) {
             return;
         }
@@ -45,18 +45,19 @@ export default class CommandHandler {
             messageStart = this.client.user.mention.length;
         }
 
-        if (messageStart > 0 || !context.Guild) {
+        if (messageStart > 0 || !context.guild) {
             try {
-                const result: ResultInterface = await this.commands.ExecuteAsync(context, messageStart);
-                if (result.IsSuccess === false) {
-                    this.logger.error('Code: %d Reason: %s',result.Error.toString(), result.ErrorReason);
+                const result: ResultInterface = await this.commands.executeAsync(context, messageStart);
+                if (result.isSuccess === false) {
+                    this.logger.error('code: %d Reason: %s', result.error.toString(), result.errorReason);
                     if (result instanceof ExecuteResult) {
-                        this.logger.error('Exception: %O', result.Exception);
+                        this.logger.error('exception: %O', (result as ExecuteResult).exception);
                     }
                 }
+                this.client.emit('commandExecuted', message, context, result);
 
             } catch (error) {
-                this.logger.error('Error running command: %O', error);
+                this.logger.error('error running command: %O', error);
             }
         }
     }
