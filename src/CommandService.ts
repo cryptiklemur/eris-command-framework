@@ -1,5 +1,6 @@
 import {Container, inject, injectable} from 'inversify';
 import {Dictionary} from 'typescript-collections';
+import AbstractPlugin from './AbstractPlugin';
 
 import CommandContext from './CommandContext';
 import CommandError from './CommandError';
@@ -30,7 +31,7 @@ export default class CommandService {
     private commandParser: CommandParser;
 
     // tslint:disable-next-line
-    private plugins: Dictionary<string, Interfaces.PluginInterface> = new Dictionary<string, Interfaces.PluginInterface>();
+    private plugins: Dictionary<string, AbstractPlugin> = new Dictionary<string, AbstractPlugin>();
 
     private commands: CommandInfo[] = [];
 
@@ -39,16 +40,13 @@ export default class CommandService {
         this.commandParser = container.get<CommandParser>(TYPES.command.parser);
     }
 
-    public async initialize(plugins: { [name: string]: Interfaces.PluginInterface }): Promise<void> {
+    public async initialize(plugins: { [name: string]: typeof AbstractPlugin }): Promise<void> {
         for (const name in plugins) {
             if (!plugins.hasOwnProperty(name)) {
                 continue;
             }
 
-            const plugin: Interfaces.PluginInterface = this.container.getNamed<Interfaces.PluginInterface>(
-                TYPES.plugin,
-                name,
-            );
+            const plugin: AbstractPlugin = this.container.getNamed<AbstractPlugin>(TYPES.plugin, name);
             await plugin.initialize();
             const prototype: any = Object.getPrototypeOf(plugin);
             this.plugins.setValue(name, plugin);

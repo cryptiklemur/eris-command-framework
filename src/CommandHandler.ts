@@ -49,7 +49,7 @@ export default class CommandHandler {
             try {
                 const result: ResultInterface = await this.commands.executeAsync(context, messageStart);
                 if (result.isSuccess === false) {
-                    this.logger.error('code: %d Reason: %s', result.error.toString(), result.errorReason);
+                    this.logger.error('code: %d reason: %s', result.error.toString(), result.errorReason);
                     if (result instanceof ExecuteResult) {
                         this.logger.error('exception: %O', (result as ExecuteResult).exception);
                     }

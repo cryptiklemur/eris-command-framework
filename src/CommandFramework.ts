@@ -1,5 +1,6 @@
 import {Container} from 'inversify';
 import {createLogger, format, Logger} from 'winston';
+import AbstractPlugin from './AbstractPlugin';
 
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandHandler from './CommandHandler';
@@ -15,7 +16,7 @@ export default class CommandFramework {
     constructor(
         private container: Container,
         configuration: Configuration,
-        private plugins: { [name: string]: Interfaces.PluginInterface } = {},
+        private plugins: { [name: string]: typeof AbstractPlugin } = {},
     ) {
         container.bind<Configuration>(Types.configuration).toConstantValue(configuration);
         if (!container.isBound(Types.logger)) {
@@ -38,7 +39,7 @@ export default class CommandFramework {
 
     public async initialize(): Promise<void> {
         for (const name of Object.keys(this.plugins)) {
-            const plugin: Interfaces.PluginInterface = this.plugins[name];
+            const plugin: typeof AbstractPlugin = this.plugins[name];
             this.container.bind<Interfaces.PluginInterface>(Types.plugin).to(plugin as any).whenTargetNamed(name);
             (plugin as any).addToContainer(this.container);
         }
