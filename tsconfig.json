@@ -11,6 +11,7 @@
         "module":                 "commonjs",
         "moduleResolution":       "node",
         "preserveConstEnums":     true,
+        "removeComments":         false,
         "sourceMap":              true,
         "declaration":            true,
         "experimentalDecorators": true,

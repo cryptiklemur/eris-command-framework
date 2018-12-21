@@ -1,9 +1,8 @@
 import CommandError from '../CommandError';
 import {Interfaces} from '../Interfaces';
 import TypeReaderValue from './TypeReaderValue';
-import ResultInterface = Interfaces.ResultInterface;
 
-export default class TypeReaderResult implements ResultInterface {
+export default class TypeReaderResult implements Interfaces.ResultInterface {
     public static FromSuccess(value: TypeReaderValue | TypeReaderValue[]): TypeReaderResult {
         return new TypeReaderResult(Array.isArray(value) ? value : [value]);
     }
@@ -13,6 +12,7 @@ export default class TypeReaderResult implements ResultInterface {
     }
 
     public IsSuccess: boolean;
+    public Reader: Interfaces.TypeReaderInterface;
 
     constructor(public Values: TypeReaderValue[], public Error?: CommandError, public ErrorReason?: string) {
         this.IsSuccess = !Error;

@@ -8,8 +8,9 @@ import AbstractTypeReader from './AbstractTypeReader';
 export default class PrimitiveTypeReader extends AbstractTypeReader {
     // @ts-ignore
     public Read(client: Client, context: CommandContext, input: string): TypeReaderResult {
-        let num: number = parseInt(input, 10);
-        if (!isNaN(num) && Number.isSafeInteger(num)) {
+        if (/^[0-9.,]+$/.test(input)) {
+            const num: number = parseInt(input.replace(/,/g, ''), 10);
+
             return TypeReaderResult.FromSuccess([new TypeReaderValue(num, 1.0)]);
         }
 
