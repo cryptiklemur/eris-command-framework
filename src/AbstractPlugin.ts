@@ -16,7 +16,7 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
     public static Name: string;
     public static Config: any = {};
 
-    public static addToContainer(container: Container): void {
+    public static addToContainer(container: Container, types: any): void {
         throw new Error('plugin must implement addToContainer, even if its empty.');
     }
 

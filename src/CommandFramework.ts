@@ -15,6 +15,7 @@ import Types from './types';
 export default class CommandFramework {
     constructor(
         private container: Container,
+        private types: any,
         configuration: Configuration,
         private plugins: { [name: string]: typeof AbstractPlugin } = {},
     ) {
@@ -41,7 +42,7 @@ export default class CommandFramework {
         for (const name of Object.keys(this.plugins)) {
             const plugin: typeof AbstractPlugin = this.plugins[name];
             this.container.bind<Interfaces.PluginInterface>(Types.plugin).to(plugin as any).whenTargetNamed(name);
-            (plugin as any).addToContainer(this.container);
+            (plugin as any).addToContainer(this.container, this.types);
         }
 
         await this.container.get<Authorizer>(Types.security.authorizer).initialize();
