@@ -42,7 +42,7 @@ export default class CommandFramework {
         for (const name of Object.keys(this.plugins)) {
             const plugin: typeof AbstractPlugin = this.plugins[name];
             this.container.bind<Interfaces.PluginInterface>(Types.plugin).to(plugin as any).whenTargetNamed(name);
-            (plugin as any).addToContainer(this.container, this.types);
+            await (plugin as any).addToContainer(this.container, this.types);
         }
 
         await this.container.get<Authorizer>(Types.security.authorizer).initialize();
