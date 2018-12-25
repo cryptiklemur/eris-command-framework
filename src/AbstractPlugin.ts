@@ -66,11 +66,11 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
     }
 
     protected async reactOk(): Promise<void> {
-        return this.context.Message.addReaction('👍🏻');
+        return this.context.message.addReaction('👍🏻');
     }
 
     protected async reactNotOk(): Promise<void> {
-        return this.context.Message.addReaction('👎🏻');
+        return this.context.message.addReaction('👎🏻');
     }
 
     protected async reply(content: string): Promise<void> {

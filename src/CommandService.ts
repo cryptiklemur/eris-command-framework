@@ -75,7 +75,7 @@ export default class CommandService {
      * @returns {Promise<Interfaces.ResultInterface>}
      */
     public async executeAsync(context: CommandContext, messageStart: number = 0): Promise<Interfaces.ResultInterface> {
-        const input: string = context.Message.content.substr(messageStart).trim();
+        const input: string = context.message.content.substr(messageStart).trim();
 
         const searchResult: SearchResult = await this.searchAsync(context, input);
         if (!searchResult.isSuccess) {

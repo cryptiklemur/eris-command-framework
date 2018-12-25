@@ -6,10 +6,10 @@ export default class CommandContext {
     public user: User;
     public member: Member;
 
-    constructor(public Client: Client, public Message: Message) {
-        this.channel = Message.channel;
+    constructor(public client: Client, public message: Message) {
+        this.channel = message.channel;
         this.guild   = (this.channel as GuildChannel).guild;
-        this.user    = Message.author;
-        this.member  = Message.member;
+        this.user    = message.author;
+        this.member  = message.member;
     }
 };
