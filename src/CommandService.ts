@@ -82,10 +82,10 @@ export default class CommandService {
             return searchResult;
         }
 
-        for (let command of searchResult.Commands) {
+        for (let command of searchResult.commands) {
             let preconditionResult: PreconditionResult = this.checkPermissions(context, command);
             if (!preconditionResult.isSuccess) {
-                if (searchResult.Commands.length === 1) {
+                if (searchResult.commands.length === 1) {
                     return preconditionResult;
                 }
                 continue;
@@ -98,14 +98,14 @@ export default class CommandService {
             );
             // this._logger.info("Parse result: ", parseResult);
             if (!parseResult.isSuccess) {
-                if (parseResult.Error === CommandError.MultipleMatches) {
+                if (parseResult.error === CommandError.MultipleMatches) {
                     parseResult = ParseResult.FromMultipleSuccess(
                         parseResult.argValues.map((x) => x.values.sort((a, b) => a.Score < b.Score ? 1 : -1)[0]),
                     );
                 }
 
                 if (!parseResult.isSuccess) {
-                    if (searchResult.Commands.length === 1) {
+                    if (searchResult.commands.length === 1) {
                         return parseResult;
                     }
 

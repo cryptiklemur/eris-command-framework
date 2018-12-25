@@ -57,9 +57,9 @@ export default class ParseResult implements ResultInterface {
     constructor(
         public argValues: TypeReaderResult[],
         public paramValues: TypeReaderResult[],
-        public Error?: CommandError,
-        public ErrorReason?: string,
+        public error?: CommandError,
+        public errorReason?: string,
     ) {
-        this.isSuccess = !Error;
+        this.isSuccess = !error;
     }
 };

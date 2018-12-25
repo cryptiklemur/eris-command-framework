@@ -14,7 +14,8 @@ export default class SearchResult implements Interfaces.ResultInterface {
     public isSuccess: boolean;
 
     constructor(
-        public text?: string, public Commands?: CommandInfo[],
+        public text?: string,
+        public commands?: CommandInfo[],
         public error?: CommandError,
         public errorReason?: string,
     ) {

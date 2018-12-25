@@ -8,7 +8,6 @@ import Configuration from './Configuration';
 import {Interfaces} from './Interfaces';
 import ExecuteResult from './Result/ExecuteResult';
 import TYPES from './types';
-import ResultInterface = Interfaces.ResultInterface;
 
 @injectable()
 export default class CommandHandler {
@@ -47,7 +46,7 @@ export default class CommandHandler {
 
         if (messageStart > 0 || !context.guild) {
             try {
-                const result: ResultInterface = await this.commands.executeAsync(context, messageStart);
+                const result: Interfaces.ResultInterface = await this.commands.executeAsync(context, messageStart);
                 if (result.isSuccess === false) {
                     this.logger.error('code: %d reason: %s', result.error, result.errorReason);
                     if (result instanceof ExecuteResult) {
