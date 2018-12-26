@@ -2,25 +2,15 @@ import {Client, Message} from 'eris';
 import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
 
+import Configuration from './Configuration';
 import Types from './types';
 
 @injectable()
 export default class InteractiveHelper {
-    private static isReply(messageOne: Message, messageTwo: Message): boolean {
-        if (messageOne.author.id !== messageTwo.author.id) {
-            return false;
-        }
-
-        if (messageOne.channel) {
-            if (!messageTwo.channel || messageOne.channel.id !== messageTwo.channel.id) {
-                return false;
-            }
-        }
-
-        return !(!messageOne.channel && messageTwo.channel);
-    }
-
-    public constructor(@inject(Types.discordClient) private client: Client) {
+    public constructor(
+        @inject(Types.discordClient) private client: Client,
+        @inject(Types.configuration) private configuration: Configuration,
+    ) {
     }
 
     public listenForReplies(
@@ -29,7 +19,7 @@ export default class InteractiveHelper {
     ): EventEmitter {
         const emitter = new EventEmitter();
         const listener = (type) => (msg, ...arg) => {
-            if (InteractiveHelper.isReply(arg[0], message)) {
+            if (this.isReply(message, arg[0])) {
                 emitter.emit(type, msg, ...arg);
             }
         };
@@ -37,7 +27,7 @@ export default class InteractiveHelper {
         const listeners = {};
         for (const event of ['messageCreate', 'messageReactionAdd']) {
             const eventListener = listener(event);
-            listeners[event] = eventListener;
+            listeners[event]    = eventListener;
             this.client.on(event, eventListener);
 
             setTimeout(
@@ -53,5 +43,23 @@ export default class InteractiveHelper {
         });
 
         return emitter;
+    }
+
+    private isReply(original: Message, reply: Message): boolean {
+        if (reply.content.indexOf(this.configuration.prefix) === 0) {
+            return false;
+        }
+
+        if (original.author.id !== reply.author.id) {
+            return false;
+        }
+
+        if (original.channel) {
+            if (!reply.channel || original.channel.id !== reply.channel.id) {
+                return false;
+            }
+        }
+
+        return !(!original.channel && reply.channel);
     }
 }
