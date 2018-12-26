@@ -12,7 +12,7 @@ export default class InteractiveHelper {
         type: 'messageCreate' | 'messageReactionAdd',
         callback: (message: Message) => Promise<void>,
         timeout: number = 5 * 60 * 1000,
-    ): void {
+    ): () => void {
         const listener = (msg) => InteractiveHelper.isReply(msg, message) ? callback(msg) : null;
 
         this.client.once(type, listener);
@@ -20,6 +20,8 @@ export default class InteractiveHelper {
             () => this.client.removeListener(type, listener),
             timeout,
         );
+
+        return () => this.client.removeListener(type, listener);
     }
 
     public listenForReplies(
@@ -27,7 +29,7 @@ export default class InteractiveHelper {
         type: 'messageCreate' | 'messageReactionAdd',
         callback: (message: Message) => Promise<void>,
         timeout: number = 5 * 60 * 1000,
-    ): void {
+    ): () => void {
         const listener = (msg) => InteractiveHelper.isReply(msg, message) ? callback(msg) : null;
 
         this.client.on(type, listener);
@@ -35,6 +37,8 @@ export default class InteractiveHelper {
             () => this.client.removeListener(type, listener),
             timeout,
         );
+
+        return () => this.client.removeListener(type, listener);
     }
 
     private static isReply(messageOne: Message, messageTwo: Message): boolean {
