@@ -40,12 +40,12 @@ export default class InteractiveHelper {
             this.client.on(event, eventListener);
 
             setTimeout(
-                () => emitter.emit('close'),
+                () => emitter.emit('close', true),
                 timeout,
             );
         }
 
-        emitter.once('close', () => {
+        emitter.once('close', (inactive) => {
             for (const event of Object.keys(listeners)) {
                 this.client.removeListener(event, listeners[event]);
             }
