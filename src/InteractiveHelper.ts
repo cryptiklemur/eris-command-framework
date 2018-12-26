@@ -1,3 +1,4 @@
+import {emit} from 'cluster';
 import {Client, Message} from 'eris';
 import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
@@ -26,7 +27,7 @@ export default class InteractiveHelper {
         message: Message,
         timeout: number = 30 * 60 * 1000,
     ): EventEmitter {
-        const emitter = new EventEmitter();
+        let emitter = new EventEmitter();
         const listener = (type) => (msg, ...args) => {
             if (this.isReply(type, message, msg, args)) {
                 emitter.emit(type, msg, ...args);
@@ -46,6 +47,8 @@ export default class InteractiveHelper {
         }
 
         emitter.once('close', (inactive) => {
+            emitter.removeAllListeners();
+            emitter = undefined;
             for (const event of Object.keys(listeners)) {
                 this.client.removeListener(event, listeners[event]);
             }
