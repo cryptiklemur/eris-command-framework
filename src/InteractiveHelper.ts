@@ -19,7 +19,7 @@ export default class InteractiveHelper {
     ): EventEmitter {
         const emitter = new EventEmitter();
         const listener = (type) => (msg, ...arg) => {
-            if (this.isReply(message, arg[0])) {
+            if (this.isReply(message, msg)) {
                 emitter.emit(type, msg, ...arg);
             }
         };
