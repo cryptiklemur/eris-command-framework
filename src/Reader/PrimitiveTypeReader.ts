@@ -10,8 +10,9 @@ export default class PrimitiveTypeReader extends AbstractTypeReader {
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         if (/^[0-9.,]+$/.test(input)) {
             const num: number = parseInt(input.replace(/,/g, ''), 10);
-
-            return TypeReaderResult.fromSuccess([new TypeReaderValue(num, 1.0)]);
+            if (num.toString() === input.replace(/,/g, '')) {
+                return TypeReaderResult.fromSuccess([new TypeReaderValue(num, 1.0)]);
+            }
         }
 
         return TypeReaderResult.fromSuccess([new TypeReaderValue(input, 1.0)]);
