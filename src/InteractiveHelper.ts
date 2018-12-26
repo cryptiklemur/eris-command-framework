@@ -5,6 +5,15 @@ import {inject, injectable} from 'inversify';
 import Configuration from './Configuration';
 import Types from './types';
 
+export const ALLOWED_EVENTS = [
+    'messageCreate',
+    'messageReactionAdd',
+    'messageReactionRemove',
+    'messageReactionRemoveAll',
+    'messageUpdate',
+    'messageDelete'
+];
+
 @injectable()
 export default class InteractiveHelper {
     public constructor(
@@ -25,7 +34,7 @@ export default class InteractiveHelper {
         };
 
         const listeners = {};
-        for (const event of ['messageCreate', 'messageReactionAdd', 'messageReactionRemove', 'messageReactionRemoveAll', 'messageUpdate', 'messageDelete']) {
+        for (const event of ALLOWED_EVENTS) {
             const eventListener = listener(event);
             listeners[event]    = eventListener;
             this.client.on(event, eventListener);
