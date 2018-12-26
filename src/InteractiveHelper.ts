@@ -18,9 +18,9 @@ export default class InteractiveHelper {
         timeout: number = 30 * 60 * 1000,
     ): EventEmitter {
         const emitter = new EventEmitter();
-        const listener = (type) => (msg, ...arg) => {
-            if (this.isReply(message, msg)) {
-                emitter.emit(type, msg, ...arg);
+        const listener = (type) => (msg, ...args) => {
+            if (this.isReply(type, message, msg, args)) {
+                emitter.emit(type, msg, ...args);
             }
         };
 
@@ -45,21 +45,39 @@ export default class InteractiveHelper {
         return emitter;
     }
 
-    private isReply(original: Message, reply: Message): boolean {
-        if (reply.content.indexOf(this.configuration.prefix) === 0) {
-            return false;
-        }
-
-        if (original.author.id !== reply.author.id) {
-            return false;
-        }
-
-        if (original.channel) {
-            if (!reply.channel || original.channel.id !== reply.channel.id) {
+    private isReply(
+        type: 'messageCreate' | 'messageReactionAdd',
+        original: Message,
+        reply: Message,
+        args?: any[],
+    ): boolean {
+        if (type === 'messageCreate') {
+            if (reply.content.indexOf(this.configuration.prefix) === 0) {
                 return false;
             }
+
+            if (original.author.id !== reply.author.id) {
+                return false;
+            }
+
+            if (original.channel) {
+                if (!reply.channel || original.channel.id !== reply.channel.id) {
+                    return false;
+                }
+            }
+
+            return !(!original.channel && reply.channel);
         }
 
-        return !(!original.channel && reply.channel);
+        if (original.id !== reply.id) {
+            return false;
+        }
+
+        const userId = args[1];
+        if (this.client.user.id === userId) {
+            return false;
+        }
+
+        return true;
     }
 }
