@@ -1,8 +1,8 @@
-import {emit} from 'cluster';
 import {Client, Message} from 'eris';
+import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
+
 import Types from './types';
-import EventEmitter = NodeJS.EventEmitter;
 
 @injectable()
 export default class InteractiveHelper {
