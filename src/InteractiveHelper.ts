@@ -11,7 +11,7 @@ export const ALLOWED_EVENTS = [
     'messageReactionRemove',
     'messageReactionRemoveAll',
     'messageUpdate',
-    'messageDelete'
+    'messageDelete',
 ];
 
 @injectable()
@@ -40,7 +40,7 @@ export default class InteractiveHelper {
             this.client.on(event, eventListener);
 
             setTimeout(
-                () => this.client.removeListener(event, eventListener),
+                () => emitter.emit('close'),
                 timeout,
             );
         }
