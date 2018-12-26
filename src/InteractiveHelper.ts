@@ -25,7 +25,7 @@ export default class InteractiveHelper {
         };
 
         const listeners = {};
-        for (const event of ['messageCreate', 'messageReactionAdd']) {
+        for (const event of ['messageCreate', 'messageReactionAdd', 'messageReactionRemove', 'messageReactionRemoveAll', 'messageUpdate', 'messageDelete']) {
             const eventListener = listener(event);
             listeners[event]    = eventListener;
             this.client.on(event, eventListener);
