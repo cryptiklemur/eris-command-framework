@@ -6,5 +6,6 @@ export {default as CommandHandler} from './CommandHandler';
 export {default as CommandParser} from './CommandParser';
 export {default as CommandService} from './CommandService';
 export {default as Configuration} from './Configuration';
+export {default as InteractiveHelper} from './InteractiveHelper';
 export {Interfaces} from './Interfaces';
 export {default as types} from './types';

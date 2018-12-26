@@ -8,6 +8,7 @@ import CommandParser from './CommandParser';
 import CommandService from './CommandService';
 import Configuration from './Configuration';
 import Permission from './Entity/Permission';
+import InteractiveHelper from './InteractiveHelper';
 import {Interfaces} from './Interfaces';
 import Authorizer from './Security/Authorizer';
 import Types from './types';
@@ -36,6 +37,7 @@ export default class CommandFramework {
         container.bind<CommandHandler>(Types.command.handler).to(CommandHandler);
         container.bind<CommandParser>(Types.command.parser).to(CommandParser);
         container.bind<Authorizer>(Types.security.authorizer).to(Authorizer);
+        container.bind<InteractiveHelper>(Types.interactiveHelper).to(InteractiveHelper);
     }
 
     public async initialize(): Promise<void> {

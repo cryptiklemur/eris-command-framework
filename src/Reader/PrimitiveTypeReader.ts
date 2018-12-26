@@ -16,6 +16,5 @@ export default class PrimitiveTypeReader extends AbstractTypeReader {
         }
 
         return TypeReaderResult.fromSuccess([new TypeReaderValue(input, 1.0)]);
-
     }
 };
