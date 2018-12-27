@@ -1,5 +1,5 @@
 import {emit} from 'cluster';
-import {Client, Message} from 'eris';
+import {Client, Message, User} from 'eris';
 import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
 
@@ -25,12 +25,13 @@ export default class InteractiveHelper {
 
     public listenForReplies(
         message: Message,
+        author: User,
         timeout: number = 30 * 60 * 1000,
     ): EventEmitter {
         let emitter = new EventEmitter();
         const listener = (type) => (msg, ...args) => {
-            if (this.isReply(type, message, msg, args)) {
-                emitter.emit(type, msg, ...args);
+            if (this.isReply(type, message, msg, user, args)) {
+                emitter.emit(type, msg, user, ...args);
             }
         };
 
@@ -61,6 +62,7 @@ export default class InteractiveHelper {
         type: 'messageCreate' | 'messageReactionAdd',
         original: Message,
         reply: Message,
+        user: User,
         args?: any[],
     ): boolean {
         if (type === 'messageCreate') {
@@ -68,17 +70,23 @@ export default class InteractiveHelper {
                 return false;
             }
 
-            if (original.author.id !== reply.author.id) {
+            if (user.id !== reply.author.id) {
                 return false;
             }
 
-            if (original.channel) {
-                if (!reply.channel || original.channel.id !== reply.channel.id) {
-                    return false;
-                }
+            if (original.channel && !reply.channel) {
+                return false;
             }
 
-            return !(!original.channel && reply.channel);
+            if (!original.channel && reply.channel) {
+                return false;
+            }
+
+            if (original.channel && reply.channel && original.channel.id !== reply.channel.id) {
+                return false;
+            }
+
+            return true;
         }
 
         if (original.id !== reply.id) {
