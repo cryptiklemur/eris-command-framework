@@ -25,7 +25,7 @@ export default class InteractiveHelper {
 
     public listenForReplies(
         message: Message,
-        author: User,
+        user: User,
         timeout: number = 30 * 60 * 1000,
     ): EventEmitter {
         let emitter = new EventEmitter();
