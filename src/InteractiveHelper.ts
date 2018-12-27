@@ -93,11 +93,6 @@ export default class InteractiveHelper {
             return false;
         }
 
-        const userId = args[1];
-        if (user.id === userId) {
-            return false;
-        }
-
-        return true;
+        return args[1] === user.id;
     }
 }
