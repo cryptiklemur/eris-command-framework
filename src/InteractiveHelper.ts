@@ -94,7 +94,7 @@ export default class InteractiveHelper {
         }
 
         const userId = args[1];
-        if (this.client.user.id === userId) {
+        if (user.id === userId) {
             return false;
         }
 
