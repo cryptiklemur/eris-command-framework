@@ -7,6 +7,7 @@ const Types = {
     configuration:     Symbol('configuration'),
     connection:        Symbol('Connection'),
     discordClient:     Symbol('discordClient'),
+    discordRestClient: Symbol('discordRestClient'),
     environment:       Symbol('environment'),
     logger:            Symbol('logger'),
     interactiveHelper: Symbol('interactive_helper'),
