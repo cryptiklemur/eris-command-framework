@@ -59,7 +59,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
 
             if (results.size() === 0) {
                 client.guilds.filter(
-                    (x) => !!x.channels.find((y) => y.id === idRegex.exec(input)[1]),
+                    (x) => !!x.channels.find((y) => y.id === input),
                 ).forEach(
                     (x) => {
                         ChannelTypeReader.addResult(
