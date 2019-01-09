@@ -35,7 +35,9 @@ export default class ChannelTypeReader extends AbstractTypeReader {
                     guildChannels.find((x) => x.id === mentionRegex.exec(input)[1]),
                     1.00,
                 );
-            } else {
+            }
+
+            if (results.size() === 0) {
                 client.guilds.filter(
                     (x) => !!x.channels.find((y) => y.id === mentionRegex.exec(input)[1]),
                 ).forEach(
@@ -53,7 +55,9 @@ export default class ChannelTypeReader extends AbstractTypeReader {
         if (idRegex.test(input)) {
             if (context.guild) {
                 ChannelTypeReader.addResult(results, guildChannels.find((x) => x.id === input), 0.90);
-            } else {
+            }
+
+            if (results.size() === 0) {
                 client.guilds.filter(
                     (x) => !!x.channels.find((y) => y.id === mentionRegex.exec(input)[1]),
                 ).forEach(
