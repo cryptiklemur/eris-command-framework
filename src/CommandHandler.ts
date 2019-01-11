@@ -1,5 +1,4 @@
 import {Client, Message} from 'eris';
-import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
 import {Logger as LoggerInstance} from 'winston';
 
@@ -30,9 +29,6 @@ export default class CommandHandler {
 
     @inject(TYPES.command.service)
     private commands: CommandService;
-
-    @inject(TYPES.eventEmitter)
-    private emitter: EventEmitter;
 
     @inject(TYPES.logger)
     private logger: LoggerInstance;

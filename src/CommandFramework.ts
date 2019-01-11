@@ -1,5 +1,4 @@
-import {EventEmitter} from 'events';
-import {Container, decorate, injectable} from 'inversify';
+import {Container} from 'inversify';
 import {createLogger, format, Logger} from 'winston';
 
 import AbstractPlugin from './AbstractPlugin';
@@ -14,8 +13,6 @@ import {Interfaces} from './Interfaces';
 import Authorizer from './Security/Authorizer';
 import Types from './types';
 
-decorate(injectable(), EventEmitter);
-
 export default class CommandFramework {
     constructor(
         private container: Container,
@@ -24,7 +21,7 @@ export default class CommandFramework {
         private plugins: { [name: string]: typeof AbstractPlugin } = {},
     ) {
         container.bind<Configuration>(Types.configuration).toConstantValue(configuration);
-        if (!container.isBound(Types.logger)) {
+        if (!container.get(Types.logger)) {
             container.bind<Logger>(Types.logger).toConstantValue(createLogger({
                 level:      'info',
                 format:     format.combine(
@@ -35,7 +32,6 @@ export default class CommandFramework {
             }));
         }
 
-        container.bind<EventEmitter>(Types.eventEmitter).to(EventEmitter);
         container.bind<MessageBuffer>(Types.messageBuffer).to(MessageBuffer);
         container.bind<CommandService>(Types.command.service).to(CommandService);
         container.bind<CommandHandler>(Types.command.handler).to(CommandHandler);
