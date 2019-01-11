@@ -1,4 +1,5 @@
 import {Client, Message} from 'eris';
+import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
 import {Logger as LoggerInstance} from 'winston';
 
@@ -9,8 +10,18 @@ import {Interfaces} from './Interfaces';
 import ExecuteResult from './Result/ExecuteResult';
 import TYPES from './types';
 
+interface Events {
+    beforeExecute: (context: CommandContext) => Promise<boolean> | boolean;
+    afterExecute: (context: CommandContext, result: Interfaces.ResultInterface) => Promise<void> | void;
+}
+
 @injectable()
 export default class CommandHandler {
+    public readonly events: Events = {
+        beforeExecute: () => true,
+        afterExecute:  () => null,
+    };
+
     @inject(TYPES.configuration)
     private configuration: Configuration;
 
@@ -19,6 +30,9 @@ export default class CommandHandler {
 
     @inject(TYPES.command.service)
     private commands: CommandService;
+
+    @inject(TYPES.eventEmitter)
+    private emitter: EventEmitter;
 
     @inject(TYPES.logger)
     private logger: LoggerInstance;
@@ -44,9 +58,14 @@ export default class CommandHandler {
             messageStart = this.client.user.mention.length;
         }
 
+        if (!await this.events.beforeExecute(context)) {
+            return;
+        }
+
         if (messageStart > 0 || !context.guild) {
             try {
                 const result: Interfaces.ResultInterface = await this.commands.executeAsync(context, messageStart);
+                await this.events.afterExecute(context, result);
                 if (result.isSuccess === false) {
                     if (result.error !== 1) {
                         this.logger.error('code: %d reason: %s', result.error, result.errorReason);

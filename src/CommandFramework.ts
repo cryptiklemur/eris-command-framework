@@ -1,7 +1,8 @@
-import {Container} from 'inversify';
+import {EventEmitter} from 'events';
+import {Container, decorate, injectable} from 'inversify';
 import {createLogger, format, Logger} from 'winston';
-import AbstractPlugin from './AbstractPlugin';
 
+import AbstractPlugin from './AbstractPlugin';
 import MessageBuffer from './Buffer/MessageBuffer';
 import CommandHandler from './CommandHandler';
 import CommandParser from './CommandParser';
@@ -12,6 +13,8 @@ import InteractiveHelper from './InteractiveHelper';
 import {Interfaces} from './Interfaces';
 import Authorizer from './Security/Authorizer';
 import Types from './types';
+
+decorate(injectable(), EventEmitter);
 
 export default class CommandFramework {
     constructor(
@@ -32,6 +35,7 @@ export default class CommandFramework {
             }));
         }
 
+        container.bind<EventEmitter>(Types.eventEmitter).to(EventEmitter);
         container.bind<MessageBuffer>(Types.messageBuffer).to(MessageBuffer);
         container.bind<CommandService>(Types.command.service).to(CommandService);
         container.bind<CommandHandler>(Types.command.handler).to(CommandHandler);

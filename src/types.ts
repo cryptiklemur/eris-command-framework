@@ -9,6 +9,7 @@ const Types = {
     discordClient:     Symbol('discordClient'),
     discordRestClient: Symbol('discordRestClient'),
     environment:       Symbol('environment'),
+    eventEmitter:      Symbol('eventEmitter'),
     logger:            Symbol('logger'),
     interactiveHelper: Symbol('interactive_helper'),
     messageBuffer:     Symbol('messageBuffer'),
