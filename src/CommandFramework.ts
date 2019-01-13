@@ -14,6 +14,8 @@ import Authorizer from './Security/Authorizer';
 import Types from './types';
 
 export default class CommandFramework {
+    private readonly logger: Logger;
+
     constructor(
         private container: Container,
         private types: any,
@@ -31,6 +33,7 @@ export default class CommandFramework {
                 transports: [],
             }));
         }
+        this.logger = container.get(Types.logger);
 
         container.bind<MessageBuffer>(Types.messageBuffer).to(MessageBuffer);
         container.bind<CommandService>(Types.command.service).to(CommandService);
@@ -43,6 +46,7 @@ export default class CommandFramework {
     public async initialize(): Promise<void> {
         for (const name of Object.keys(this.plugins)) {
             const plugin: typeof AbstractPlugin = this.plugins[name];
+            this.logger.debug('Adding %s to the container', name);
             this.container.bind<Interfaces.PluginInterface>(Types.plugin).to(plugin as any).whenTargetNamed(name);
             await (plugin as any).addToContainer(this.container, this.types);
         }

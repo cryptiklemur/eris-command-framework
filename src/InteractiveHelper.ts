@@ -42,7 +42,11 @@ export default class InteractiveHelper {
             this.client.on(event, eventListener);
 
             setTimeout(
-                () => emitter.emit('close', true),
+                () => {
+                    if (emitter) {
+                        emitter.emit('close', true);
+                    }
+                },
                 timeout,
             );
         }
