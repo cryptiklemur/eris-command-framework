@@ -1,5 +1,5 @@
 import {Client, TextableChannel} from 'eris';
-import {Container, inject, injectable} from 'inversify';
+import {Container, inject, injectable, optional} from 'inversify';
 import * as moment from 'moment';
 import {Connection, Repository} from 'typeorm';
 import {Logger} from 'winston';
@@ -14,6 +14,7 @@ import TYPES from './types';
 @injectable()
 export default abstract class AbstractPlugin implements Interfaces.PluginInterface {
     public static Name: string;
+
     public static Config: any = {};
 
     public static addToContainer(container: Container, types: any): void {
@@ -50,7 +51,7 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
     @inject(TYPES.messageBuffer)
     public messageBuffer: MessageBuffer;
 
-    @inject(TYPES.connection)
+    @inject(TYPES.connection) @optional()
     public database: Connection;
 
     @inject(TYPES.logger)
@@ -111,7 +112,11 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
         return await this.sendEmbed(embed);
     }
 
-    protected getRepository<T>(entityClass: any): Repository<T> {
+    protected getRepository<T>(entityClass: any): Repository<T> | null {
+        if (!this.database) {
+            return null;
+        }
+
         return this.database.getRepository<T>(entityClass) as Repository<T>;
     }
 }
