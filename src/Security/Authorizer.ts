@@ -1,5 +1,5 @@
 import {Member, User} from 'eris';
-import {inject, injectable} from 'inversify';
+import {inject, injectable, optional} from 'inversify';
 import {Connection} from 'typeorm';
 import {Logger as LoggerInstance} from 'winston';
 import Permission, {PermissionType} from '../Entity/Permission';
@@ -33,7 +33,7 @@ export default class Authorizer {
         return true;
     }
 
-    @inject(TYPES.connection)
+    @inject(TYPES.connection) @optional()
     private database: Connection;
 
     @inject(TYPES.logger)
@@ -44,6 +44,12 @@ export default class Authorizer {
     private permissions: Permission[]   = [];
 
     public async initialize(): Promise<void> {
+        if (!this.database) {
+            this.logger.warn('No database connection, not loading permissions from the DB');
+
+            return;
+        }
+
         try {
             this.permissions = await this.database.getRepository(Permission).find();
         } catch (error) {
