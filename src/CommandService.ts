@@ -148,7 +148,8 @@ export default class CommandService {
 
     private checkPermissions(context: CommandContext, command: CommandInfo): PreconditionResult {
         const authorized: boolean = this.authorizer.isAuthorized(
-            command.permissionNode,
+            context,
+            command,
             context.member || context.user,
             command.permissionStrict,
         );

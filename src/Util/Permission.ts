@@ -5,6 +5,10 @@ import {Constants, GuildChannel, Member, PermissionOverwrite} from 'eris';
  * @see https://github.com/DV8FromTheWorld/JDA/blob/master/src/main/java/net/dv8tion/jda/core/utils/PermissionUtil.java
  */
 export default abstract class Permission {
+    public static hasPermission(permission: number, member: Member, channel?: GuildChannel): boolean {
+        return (this.getEffectivePermission(member, channel) & permission) === permission;
+    }
+
     public static getEffectivePermission(member: Member, channel?: GuildChannel): number {
         const guild = member.guild;
         let permission: number;

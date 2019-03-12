@@ -2,6 +2,7 @@ import {Client} from 'eris';
 
 import CommandContext from './CommandContext';
 import CommandError from './CommandError';
+import {PermissionOptions} from './Decorator/Permission';
 import ParameterInfo from './Info/ParameterInfo';
 import TypeReaderResult from './Result/TypeReaderResult';
 
@@ -20,6 +21,7 @@ export namespace Interfaces {
         syntax?: string;
         permissionNode?: string;
         permissionStrict: boolean;
+        permissionOptions?: PermissionOptions;
         parameters: ParameterInfo[];
         code: Function;
         types: Object;

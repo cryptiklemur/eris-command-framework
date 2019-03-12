@@ -1,9 +1,13 @@
-import {Member, User} from 'eris';
+import {GuildChannel, Member, User} from 'eris';
 import {inject, injectable, optional} from 'inversify';
 import {Connection} from 'typeorm';
 import {Logger as LoggerInstance} from 'winston';
+import CommandContext from '../CommandContext';
+
 import Permission, {PermissionType} from '../Entity/Permission';
+import CommandInfo from '../Info/CommandInfo';
 import TYPES from '../types';
+import PermissionUtil from '../Util/Permission';
 
 enum Allowed {
     No      = -1,
@@ -39,9 +43,13 @@ export default class Authorizer {
     @inject(TYPES.logger)
     private logger: LoggerInstance;
 
-    // Aaron and Pepe
-    private readonly backdoor: String[] = ['108432868149035008', '97774439319486464'];
-    private permissions: Permission[]   = [];
+    private readonly backdoor: String[];
+
+    private permissions: Permission[] = [];
+
+    public constructor() {
+        this.backdoor = process.env.BACKDOOR_USERS ? process.env.BACKDOOR_USERS.split(',') : [];
+    }
 
     public async initialize(): Promise<void> {
         if (!this.database) {
@@ -57,10 +65,16 @@ export default class Authorizer {
         }
     }
 
-    public isAuthorized(permission: string, member: Member | User, strict: boolean): boolean {
-        if (!permission) {
+    public isAuthorized(
+        context: CommandContext,
+        command: CommandInfo,
+        member: Member | User,
+        strict: boolean,
+    ): boolean {
+        if (!command.permissionNode && Object.keys(command.permissionOptions).length === 0) {
             return true;
         }
+
         if (!member) {
             return false;
         }
@@ -75,20 +89,43 @@ export default class Authorizer {
             const roles: string[] = member.roles;
             roles.push(member.guild.id);
             for (let roleId of roles) {
-                let allowed: number = this.isRoleAllowed(permission, roleId, strict);
-                if (allowed === Allowed.No) {
-                    return false;
-                } else if (allowed === Allowed.Yes) {
-                    hasPerms = true;
+                if (command.permissionNode) {
+                    let allowed: number = this.isRoleAllowed(command.permissionNode, roleId, strict);
+                    if (allowed === Allowed.No) {
+                        return false;
+                    } else if (allowed === Allowed.Yes) {
+                        hasPerms = true;
+                    }
+                }
+
+                if (command.permissionOptions.owner) {
+                    return member.guild.ownerID === member.id;
+                }
+
+                if (command.permissionOptions.permission) {
+                    return PermissionUtil.hasPermission(
+                        command.permissionOptions.permission,
+                        member,
+                        context.guild ? context.channel as GuildChannel : undefined,
+                    );
                 }
             }
         }
 
-        let allowed: number = this.isUserAllowed(permission, member, strict);
-        if (allowed === Allowed.No) {
+        if (command.permissionOptions.owner) {
             return false;
-        } else if (allowed === Allowed.Yes) {
-            hasPerms = true;
+        }
+        if (command.permissionOptions.permission) {
+            return false;
+        }
+
+        if (command.permissionNode) {
+            let allowed: number = this.isUserAllowed(command.permissionNode, member, strict);
+            if (allowed === Allowed.No) {
+                return false;
+            } else if (allowed === Allowed.Yes) {
+                hasPerms = true;
+            }
         }
 
         return hasPerms;

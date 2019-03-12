@@ -1,6 +1,7 @@
 import StringBuilder from '../Builder/StringBuilder';
 import CommandContext from '../CommandContext';
 import CommandError from '../CommandError';
+import {PermissionOptions} from '../Decorator/Permission';
 import {Interfaces} from '../Interfaces';
 import ExecuteResult from '../Result/ExecuteResult';
 import ParseResult from '../Result/ParseResult';
@@ -24,6 +25,8 @@ export default class CommandInfo implements CommandInterface {
     public permissionNode?: string = null;
 
     public permissionStrict: boolean = false;
+
+    public permissionOptions?: PermissionOptions = {};
 
     public parameters: ParameterInfo[] = [];
 
