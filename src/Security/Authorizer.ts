@@ -3,6 +3,7 @@ import {inject, injectable, optional} from 'inversify';
 import {Connection} from 'typeorm';
 import {Logger as LoggerInstance} from 'winston';
 import CommandContext from '../CommandContext';
+import Configuration from '../Configuration';
 
 import Permission, {PermissionType} from '../Entity/Permission';
 import CommandInfo from '../Info/CommandInfo';
@@ -36,6 +37,9 @@ export default class Authorizer {
 
         return true;
     }
+
+    @inject(TYPES.configuration)
+    private configuration: Configuration;
 
     @inject(TYPES.connection)
     @optional()
@@ -82,6 +86,10 @@ export default class Authorizer {
 
         if (this.backdoor.indexOf(member.id) >= 0) {
             return true;
+        }
+
+        if (command.permissionOptions.botOwner) {
+            return this.configuration.owners.includes(member.id);
         }
 
         let hasPerms: boolean = false;

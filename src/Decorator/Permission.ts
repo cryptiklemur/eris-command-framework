@@ -5,6 +5,7 @@ export interface PermissionOptions {
     noWildcards?: boolean;
     owner?: boolean;
     permission?: number;
+    botOwner?: boolean;
 }
 
 export default (optionsOrNode: string | PermissionOptions, noWildcards?: boolean) => (
