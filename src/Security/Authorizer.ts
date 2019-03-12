@@ -37,7 +37,8 @@ export default class Authorizer {
         return true;
     }
 
-    @inject(TYPES.connection) @optional()
+    @inject(TYPES.connection)
+    @optional()
     private database: Connection;
 
     @inject(TYPES.logger)
