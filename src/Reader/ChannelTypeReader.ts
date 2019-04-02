@@ -71,7 +71,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
         }
 
         // By name (0.75-0.85)
-        for (let channel of guildChannels.filter((x) => x.name.toLocaleLowerCase() === input.toLocaleLowerCase())) {
+        for (let channel of guildChannels.filter((x) => x.name && (x.name.toLocaleLowerCase() === input.toLocaleLowerCase()))) {
             ChannelTypeReader.addResult(results, channel, channel.name === input ? 0.85 : 0.75);
         }
 
