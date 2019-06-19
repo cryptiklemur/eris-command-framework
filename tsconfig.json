@@ -12,6 +12,7 @@
         "moduleResolution":       "node",
         "preserveConstEnums":     true,
         "removeComments":         false,
+        "skipLibCheck":           true,
         "sourceMap":              true,
         "declaration":            true,
         "experimentalDecorators": true,
