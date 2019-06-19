@@ -1,16 +1,16 @@
 import {Client, User} from 'eris';
-import {Dictionary} from 'typescript-collections';
 
 import CommandContext from '../CommandContext';
 import CommandError from '../CommandError';
 import TypeReaderResult from '../Result/TypeReaderResult';
 import TypeReaderValue from '../Result/TypeReaderValue';
+import Dictionary from '../Types/Dictionary';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class UserTypeReader extends AbstractTypeReader {
     private static addResult(results: Dictionary<string, TypeReaderValue>, user: User, score: number): void {
-        if (user && !results.containsKey(user.id)) {
-            results.setValue(user.id, new TypeReaderValue(user, score));
+        if (user && !results.hasOwnProperty(user.id)) {
+            results[user.id] = new TypeReaderValue(user, score);
         }
     }
 
@@ -19,7 +19,7 @@ export default class UserTypeReader extends AbstractTypeReader {
     }
 
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
-        const results: Dictionary<string, TypeReaderValue> = new Dictionary<string, TypeReaderValue>();
+        const results: Dictionary<string, TypeReaderValue> = {};
         let guildUsers: User[]                             = null;
 
         if (context.guild) {
@@ -85,8 +85,8 @@ export default class UserTypeReader extends AbstractTypeReader {
             }
         }
 
-        if (results.size() > 0) {
-            return TypeReaderResult.fromSuccess(results.values());
+        if (Object.keys(results).length > 0) {
+            return TypeReaderResult.fromSuccess(Object.values(results));
         }
 
         return TypeReaderResult.fromError(CommandError.ObjectNotFound, 'user not found.');

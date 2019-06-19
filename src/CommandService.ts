@@ -1,5 +1,4 @@
 import {Container, inject, injectable} from 'inversify';
-import {Dictionary} from 'typescript-collections';
 import AbstractPlugin from './AbstractPlugin';
 
 import CommandContext from './CommandContext';
@@ -30,8 +29,7 @@ export default class CommandService {
 
     private commandParser: CommandParser;
 
-    // tslint:disable-next-line
-    private plugins: Dictionary<string, AbstractPlugin> = new Dictionary<string, AbstractPlugin>();
+    private plugins: {[key: string]: AbstractPlugin} = {};
 
     private commands: CommandInfo[] = [];
 
@@ -49,7 +47,7 @@ export default class CommandService {
             const plugin: AbstractPlugin = this.container.getNamed<AbstractPlugin>(TYPES.plugin, name);
             await plugin.initialize();
             const prototype: any = Object.getPrototypeOf(plugin);
-            this.plugins.setValue(name, plugin);
+            this.plugins[name] = plugin;
 
             const methods: string[] = Object.getOwnPropertyNames(prototype)
                                             .filter((key) => typeof prototype[key] === 'function');
@@ -120,7 +118,7 @@ export default class CommandService {
     }
 
     public hasPlugin(name: string): boolean {
-        return this.plugins.containsKey(name);
+        return this.plugins.hasOwnProperty(name);
     }
 
     // @ts-ignore

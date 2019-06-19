@@ -1,16 +1,16 @@
 import {Client, Role} from 'eris';
-import {Dictionary} from 'typescript-collections';
 
 import CommandContext from '../CommandContext';
 import CommandError from '../CommandError';
 import TypeReaderResult from '../Result/TypeReaderResult';
 import TypeReaderValue from '../Result/TypeReaderValue';
+import Dictionary from '../Types/Dictionary';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class RoleTypeReader extends AbstractTypeReader {
     private static addResult(results: Dictionary<string, TypeReaderValue>, role: Role, score: number): void {
-        if (role && !results.containsKey(role.id)) {
-            results.setValue(role.id, new TypeReaderValue(role, score));
+        if (role && !results.hasOwnProperty(role.id)) {
+            results[role.id] = new TypeReaderValue(role, score);
         }
     }
 
@@ -19,7 +19,7 @@ export default class RoleTypeReader extends AbstractTypeReader {
     }
 
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
-        const results: Dictionary<string, TypeReaderValue> = new Dictionary<string, TypeReaderValue>();
+        const results: Dictionary<string, TypeReaderValue> = {};
         let guildRoles: Role[]                             = context.guild.roles.map((x) => x);
 
         // By Mention (1.0)
@@ -67,8 +67,8 @@ export default class RoleTypeReader extends AbstractTypeReader {
             RoleTypeReader.addResult(results, role, role.name === input ? 0.85 : 0.75);
         }
 
-        if (results.size() > 0) {
-            return TypeReaderResult.fromSuccess(results.values());
+        if (Object.keys(results).length > 0) {
+            return TypeReaderResult.fromSuccess(Object.values(results));
         }
 
         return TypeReaderResult.fromError(CommandError.ObjectNotFound, 'Role not found.');

@@ -74,7 +74,7 @@ export default class Authorizer {
         context: CommandContext,
         command: CommandInfo,
         member: Member | User,
-        strict: boolean,
+        strict: boolean = false,
     ): boolean {
         if (!command.permissionNode && Object.keys(command.permissionOptions).length === 0) {
             return true;

@@ -1,16 +1,16 @@
 import {Channel, Client, GuildChannel} from 'eris';
-import {Dictionary} from 'typescript-collections';
 
 import CommandContext from '../CommandContext';
 import CommandError from '../CommandError';
 import TypeReaderResult from '../Result/TypeReaderResult';
 import TypeReaderValue from '../Result/TypeReaderValue';
+import Dictionary from '../Types/Dictionary';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class ChannelTypeReader extends AbstractTypeReader {
     private static addResult(results: Dictionary<string, TypeReaderValue>, channel: Channel, score: number): void {
-        if (channel && !results.containsKey(channel.id)) {
-            results.setValue(channel.id, new TypeReaderValue(channel, score));
+        if (channel && !results.hasOwnProperty(channel.id)) {
+            results[channel.id] = new TypeReaderValue(channel, score);
         }
     }
 
@@ -19,7 +19,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
     }
 
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
-        const results: Dictionary<string, TypeReaderValue> = new Dictionary<string, TypeReaderValue>();
+        const results: Dictionary<string, TypeReaderValue> = {};
         let guildChannels: GuildChannel[]                  = null;
 
         if (context.guild) {
@@ -57,7 +57,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
                 ChannelTypeReader.addResult(results, guildChannels.find((x) => x.id === input), 0.90);
             }
 
-            if (results.size() === 0) {
+            if (Object.keys(results).length === 0) {
                 client.guilds.filter(
                     (x) => !!x.channels.find((y) => y.id === input),
                 ).forEach(
@@ -75,8 +75,8 @@ export default class ChannelTypeReader extends AbstractTypeReader {
             ChannelTypeReader.addResult(results, channel, channel.name === input ? 0.85 : 0.75);
         }
 
-        if (results.size() > 0) {
-            return TypeReaderResult.fromSuccess(results.values());
+        if (Object.keys(results).length > 0) {
+            return TypeReaderResult.fromSuccess(Object.values(results));
         }
 
         return TypeReaderResult.fromError(CommandError.ObjectNotFound, 'channel not found.');
