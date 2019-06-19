@@ -6,9 +6,7 @@ node_js:
 sudo: false
 
 install:
-    - npm i
     - npm i semantic-release@15 @semantic-release/npm
 
 script:
-    - npm run build
-    - npx semantic-release -e @semantic-release/npm
+    - npm run build && npx semantic-release -e @semantic-release/npm
