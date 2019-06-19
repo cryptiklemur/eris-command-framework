@@ -37,7 +37,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
                 );
             }
 
-            if (results.size() === 0) {
+            if (Object.keys(results).length === 0) {
                 client.guilds.filter(
                     (x) => !!x.channels.find((y) => y.id === mentionRegex.exec(input)[1]),
                 ).forEach(
@@ -71,6 +71,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
         }
 
         // By name (0.75-0.85)
+        // tslint:disable-next-line:max-line-length
         for (let channel of guildChannels.filter((x) => x.name && (x.name.toLocaleLowerCase() === input.toLocaleLowerCase()))) {
             ChannelTypeReader.addResult(results, channel, channel.name === input ? 0.85 : 0.75);
         }
