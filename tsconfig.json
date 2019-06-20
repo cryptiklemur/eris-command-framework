@@ -29,7 +29,6 @@
     },
     "exclude":         [
         "dist",
-        "node_modules",
-        "node_modules/json-typescript-mapper/index.ts"
+        "node_modules"
     ]
 }

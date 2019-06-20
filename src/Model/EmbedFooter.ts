@@ -1,13 +1,12 @@
-import {JsonProperty} from 'json-typescript-mapper';
+import {Expose} from 'class-transformer';
 
 export default class EmbedFooter {
-    @JsonProperty('text')
     public text?: string;
 
-    @JsonProperty('icon_url')
+    @Expose({name: 'icon_url'})
     public iconUrl?: string;
 
-    @JsonProperty('proxy_icon_url')
+    @Expose({name: 'proxy_icon_url'})
     public proxyIconUrl?: string;
 
     constructor(init?: Partial<EmbedFooter>) {

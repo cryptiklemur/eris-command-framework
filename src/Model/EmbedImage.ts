@@ -1,16 +1,13 @@
-import {JsonProperty} from 'json-typescript-mapper';
+import {Expose} from 'class-transformer';
 
 export default class EmbedImage {
-    @JsonProperty('url')
     public url: string;
 
-    @JsonProperty('proxy_url')
+    @Expose({name: 'proxy_url'})
     public proxyUrl?: string;
 
-    @JsonProperty('height')
     public height?: number;
 
-    @JsonProperty('width')
     public width?: number;
 
     constructor(init?: Partial<EmbedImage>) {
