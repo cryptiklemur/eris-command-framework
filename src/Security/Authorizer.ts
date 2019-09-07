@@ -81,14 +81,20 @@ export default class Authorizer {
         }
 
         if (!member) {
+            console.warn('No user to check permissions against.')
+
             return false;
         }
 
         if (this.backdoor.indexOf(member.id) >= 0) {
+            console.log('Backdoor user');
+
             return true;
         }
 
         if (command.permissionOptions.botOwner) {
+            console.log('Bot Owner', this.configuration.owners, member.id);
+
             return this.configuration.owners.includes(member.id);
         }
 
