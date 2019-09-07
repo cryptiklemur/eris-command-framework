@@ -41,7 +41,7 @@ export default class CommandHandler {
     }
 
     private async handleCommand(message: Message): Promise<void> {
-        if (!message || !message.author || message.author.id === this.client.user.id) {
+        if (!message || !message.content || !message.author || message.author.id === this.client.user.id) {
             return;
         }
 
