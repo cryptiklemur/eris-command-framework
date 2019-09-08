@@ -21,7 +21,8 @@
         "semantic-release": "^15.13.16",
         "ts-lint": "^4.5.1",
         "ts-node": "^7.0.1",
-        "typescript": "^3.5.2"
+        "typescript": "^3.5.2",
+        "eris": "^0.10"
     },
     "dependencies": {
         "await-semaphore": "^0.1.3",
