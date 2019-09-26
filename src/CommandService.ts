@@ -1,4 +1,5 @@
 import {Container, inject, injectable} from 'inversify';
+import {Logger} from 'winston';
 import AbstractPlugin from './AbstractPlugin';
 
 import CommandContext from './CommandContext';
@@ -29,6 +30,8 @@ export default class CommandService {
 
     private commandParser: CommandParser;
 
+    private logger: Logger;
+
     private plugins: {[key: string]: AbstractPlugin} = {};
 
     private commands: CommandInfo[] = [];
@@ -36,6 +39,7 @@ export default class CommandService {
     constructor(@inject('Container') private container: Container) {
         this.authorizer    = container.get<Authorizer>(TYPES.security.authorizer);
         this.commandParser = container.get<CommandParser>(TYPES.command.parser);
+        this.logger        = container.get<Logger>(TYPES.logger);
     }
 
     public async initialize(plugins: { [name: string]: typeof AbstractPlugin }): Promise<void> {
@@ -84,6 +88,8 @@ export default class CommandService {
             let preconditionResult: PreconditionResult = this.checkPermissions(context, command);
             if (!preconditionResult.isSuccess) {
                 if (searchResult.commands.length === 1) {
+                    this.logger.debug('Command failed permissions: %O %O', preconditionResult, searchResult);
+
                     return preconditionResult;
                 }
                 continue;
@@ -104,6 +110,8 @@ export default class CommandService {
 
                 if (!parseResult.isSuccess) {
                     if (searchResult.commands.length === 1) {
+                        this.logger.debug('Command failed: %O %O', parseResult, searchResult);
+
                         return parseResult;
                     }
 

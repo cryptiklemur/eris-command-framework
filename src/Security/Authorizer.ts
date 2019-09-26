@@ -65,6 +65,7 @@ export default class Authorizer {
 
         try {
             this.permissions = await this.database.getRepository(Permission).find();
+            this.logger.debug('Loaded permissions: %d found', this.permissions.length);
         } catch (error) {
             this.logger.error('Failed fetching permissions: %O', error);
         }
@@ -93,7 +94,7 @@ export default class Authorizer {
         }
 
         if (command.permissionOptions.botOwner) {
-            console.log('Bot Owner', this.configuration.owners, member.id);
+            console.log('Bot Owner', this.configuration, member.id);
 
             return this.configuration.owners.includes(member.id);
         }
