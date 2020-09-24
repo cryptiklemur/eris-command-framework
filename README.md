@@ -11,7 +11,7 @@ a Plugin (that implements `PluginInterface`) has Commands, that are annotated by
 * TypeORM
 * Inversify
 
-```
+```typescript
 import {CommandFramework, Interfaces, types} from 'eris-command-framework';
 
 const container = new Container({defaultScope: 'singleton'});
