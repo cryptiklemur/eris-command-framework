@@ -1,6 +1,7 @@
 {
     "name": "eris-command-framework",
     "description": "Command Framework for Eris",
+    "version": "3.0.0",
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
@@ -42,6 +43,5 @@
         "reflect-metadata": "^0.1.13",
         "typeorm": "^0.3.17",
         "winston": "^3.2.1"
-    },
-    "version": "3.0.0"
+    }
 }
