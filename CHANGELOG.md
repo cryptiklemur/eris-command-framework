@@ -1,3 +1,11 @@
+## [2.5.13](https://github.com/aequasi/eris-command-framework/compare/v2.5.12...v2.5.13) (2023-08-19)
+
+
+### Bug Fixes
+
+* **GHA:** Trying to fix release ([c287799](https://github.com/aequasi/eris-command-framework/commit/c2877997675f91d129ac85276c07ebf9f3004f4b))
+* **GHA:** Trying to fix release ([6b287a1](https://github.com/aequasi/eris-command-framework/commit/6b287a170451694f203ce2aa04f57a9dc92df04d))
+
 ## [2.5.12](https://github.com/aequasi/eris-command-framework/compare/v2.5.11...v2.5.12) (2023-08-19)
 
 
