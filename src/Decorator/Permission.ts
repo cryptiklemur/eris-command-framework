@@ -9,9 +9,11 @@ export interface PermissionOptions {
 }
 
 export default (optionsOrNode: string | PermissionOptions, noWildcards?: boolean) => (
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     target: any,
     propertyKey: string,
-) => {
+): void => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument
     const metadata: Interfaces.CommandInterface = Reflect.getOwnMetadata('command', target, propertyKey) || {};
 
     if (typeof optionsOrNode === 'string') {
@@ -21,5 +23,6 @@ export default (optionsOrNode: string | PermissionOptions, noWildcards?: boolean
         metadata.permissionOptions = optionsOrNode;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     Reflect.defineMetadata('command', metadata, target, propertyKey);
 };

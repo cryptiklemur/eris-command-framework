@@ -48,7 +48,7 @@ export default class Authorizer {
     @inject(TYPES.logger)
     private logger: LoggerInstance;
 
-    private readonly backdoor: String[];
+    private readonly backdoor: string[];
 
     private permissions: Permission[] = [];
 
@@ -82,7 +82,7 @@ export default class Authorizer {
         }
 
         if (!member) {
-            console.warn('No user to check permissions against.')
+            console.warn('No user to check permissions against.');
 
             return false;
         }
@@ -104,9 +104,9 @@ export default class Authorizer {
         if (member instanceof Member) {
             const roles: string[] = member.roles;
             roles.push(member.guild.id);
-            for (let roleId of roles) {
+            for (const roleId of roles) {
                 if (command.permissionNode) {
-                    let allowed: number = this.isRoleAllowed(command.permissionNode, roleId, strict);
+                    const allowed: Allowed = this.isRoleAllowed(command.permissionNode, roleId, strict);
                     if (allowed === Allowed.No) {
                         return false;
                     } else if (allowed === Allowed.Yes) {
@@ -136,7 +136,7 @@ export default class Authorizer {
         }
 
         if (command.permissionNode) {
-            let allowed: number = this.isUserAllowed(command.permissionNode, member, strict);
+            const allowed: Allowed = this.isUserAllowed(command.permissionNode, member, strict);
             if (allowed === Allowed.No) {
                 return false;
             } else if (allowed === Allowed.Yes) {
@@ -148,11 +148,11 @@ export default class Authorizer {
     }
 
     private isRoleAllowed(permission: string, roleId: string, strict: boolean): Allowed {
-        const perms: ReadonlyArray<Permission> = this.permissions.filter(
+        const perms: readonly Permission[] = this.permissions.filter(
             (x) => x.type === PermissionType.Role && x.typeId === roleId,
         );
 
-        for (let perm of perms) {
+        for (const perm of perms) {
             if (Authorizer.DoesPermissionMatch(permission, perm.node, strict)) {
                 return perm.allowed ? Allowed.Yes : Allowed.No;
             }
@@ -162,7 +162,7 @@ export default class Authorizer {
     }
 
     private isUserAllowed(permission: string, member: Member | User, strict: boolean): Allowed {
-        let perms: ReadonlyArray<Permission>;
+        let perms: readonly Permission[];
         if (member instanceof Member) {
             perms = this.permissions.filter(
                 (x) => x.type === PermissionType.User
@@ -179,7 +179,7 @@ export default class Authorizer {
             return Allowed.Unknown;
         }
 
-        for (let perm of perms) {
+        for (const perm of perms) {
             if (Authorizer.DoesPermissionMatch(permission, perm.node, strict)) {
                 return perm.allowed ? Allowed.Yes : Allowed.No;
             }

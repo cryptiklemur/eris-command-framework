@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-argument */
 import {Client} from 'eris';
 import moment from 'moment-timezone';
 
@@ -21,7 +22,7 @@ export default class DurationTypeReader extends AbstractTypeReader {
         );
         let m;
 
-        let duration: moment.Duration = moment.duration(0);
+        const duration: moment.Duration = moment.duration(0);
         let matches                   = 0;
         while (true) {
             m = regex.exec(input);
@@ -59,7 +60,6 @@ export default class DurationTypeReader extends AbstractTypeReader {
         return [DurationParam];
     }
 
-    // @ts-ignore
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         try {
             const duration: moment.Duration = DurationTypeReader.parseDuration(input);

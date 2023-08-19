@@ -1,7 +1,7 @@
 import Embed from '../Model/Embed';
 
 export default class EmbedBuilder {
-    public get title() {
+    public get title(): string {
         return this.embed.title;
     }
 
@@ -9,7 +9,7 @@ export default class EmbedBuilder {
         this.embed.title = value;
     }
 
-    public get description() {
+    public get description(): string {
         return this.embed.description;
     }
 
@@ -17,7 +17,7 @@ export default class EmbedBuilder {
         this.embed.description = value;
     }
 
-    public get url() {
+    public get url(): string {
         return this.embed.url;
     }
 
@@ -25,7 +25,7 @@ export default class EmbedBuilder {
         this.embed.url = value;
     }
 
-    public get thumbnailUrl() {
+    public get thumbnailUrl(): string {
         return this.embed.thumbnail.url;
     }
 
@@ -33,7 +33,7 @@ export default class EmbedBuilder {
         this.embed.thumbnail.url = value;
     }
 
-    public get imageUrl() {
+    public get imageUrl(): string {
         return this.embed.image.url;
     }
 
@@ -41,7 +41,7 @@ export default class EmbedBuilder {
         this.embed.image.url = value;
     }
 
-    public get timestamp() {
+    public get timestamp(): Date {
         return this.embed.timestamp;
     }
 
@@ -49,7 +49,7 @@ export default class EmbedBuilder {
         this.embed.timestamp = value;
     }
 
-    public get color() {
+    public get color(): number {
         return this.embed.color;
     }
 

@@ -1,5 +1,5 @@
 import {Mutex} from 'await-semaphore';
-import {Channel} from 'eris';
+import {TextableChannel} from 'eris';
 import {setInterval} from 'timers';
 
 const mutex: Mutex = new Mutex();
@@ -7,12 +7,13 @@ const mutex: Mutex = new Mutex();
 export default class ChannelBuffer<T> {
     private messages: T[] = [];
 
-    constructor(private channel: Channel, tick: Function, interval: number = 1000) {
+    constructor(private channel: TextableChannel, tick: (channel: TextableChannel, messages: T[]) => Promise<void>, interval: number = 1000) {
         setInterval(
-            async () => {
-                const release: any = await mutex.acquire();
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            async (): Promise<void> => {
+                const release = await mutex.acquire();
 
-                let messages: T[]    = this.messages.slice();
+                const messages: T[]    = this.messages.slice();
                 this.messages.length = 0;
 
                 release();
@@ -21,14 +22,14 @@ export default class ChannelBuffer<T> {
                     return;
                 }
 
-                tick(this.channel, messages);
+                return tick(this.channel, messages);
             },
             interval,
         );
     }
 
     public addItem(obj: T): void {
-        mutex.acquire().then((release) => {
+        void mutex.acquire().then((release) => {
             this.messages.push(obj);
 
             release();

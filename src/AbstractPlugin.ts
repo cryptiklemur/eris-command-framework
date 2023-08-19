@@ -17,6 +17,7 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
 
     public static Config: any = {};
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/explicit-module-boundary-types
     public static addToContainer(container: Container, types: any): void {
         throw new Error('plugin must implement addToContainer, even if its empty.');
     }
@@ -38,7 +39,7 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
         return parseInt(num, 10);
     }
 
-    protected get prefix() {
+    protected get prefix(): string {
         return this.configuration.prefix;
     }
 
@@ -78,17 +79,19 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
         await this.sendMessage(this.context.channel, content);
     }
 
+    // eslint-disable-next-line @typescript-eslint/require-await
     protected async sendMessage(channel: TextableChannel, content: string): Promise<void> {
         this.messageBuffer.addItem(channel, content);
     }
 
     protected async sendEmbed(embed: Embed): Promise<void> {
         try {
-            let jsonEmbed: any = embed.serialize();
+            const jsonEmbed = embed.serialize();
             this.logger.info('Creating embed: %j', jsonEmbed);
 
             await this.context.channel.createMessage({embed: jsonEmbed});
         } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             this.logger.error('error sending approvalMessage: %s', error.response);
             throw error;
         }
@@ -112,11 +115,13 @@ export default abstract class AbstractPlugin implements Interfaces.PluginInterfa
         return await this.sendEmbed(embed);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     protected getRepository<T>(entityClass: any): Repository<T> | null {
         if (!this.database) {
             return null;
         }
 
-        return this.database.getRepository<T>(entityClass) as Repository<T>;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        return this.database.getRepository<T>(entityClass) ;
     }
 }

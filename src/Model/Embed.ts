@@ -9,18 +9,6 @@ import EmbedProvider from './EmbedProvider';
 import EmbedThumbnail from './EmbedThumbnail';
 import EmbedVideo from './EmbedVideo';
 
-function isTargetType(val: any, type: 'object' | 'string'): boolean {
-    return typeof val === type;
-}
-
-function isArrayOrArrayClass(clazz: Function): boolean {
-    if (clazz === Array) {
-        return true;
-    }
-
-    return Object.prototype.toString.call(clazz) === '[object Array]';
-}
-
 export default class Embed {
     public title: string;
 

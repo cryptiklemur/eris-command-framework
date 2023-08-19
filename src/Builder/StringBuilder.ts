@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 export default class StringBuilder {
-    get length() {
+    get length(): number {
         return this._items.length;
     }
 
@@ -29,7 +30,7 @@ export default class StringBuilder {
         return this;
     }
 
-    public toString() {
+    public toString(): string {
         return this._items.join('');
     }
 };

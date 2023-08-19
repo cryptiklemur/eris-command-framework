@@ -8,6 +8,7 @@ import Configuration from './Configuration';
 import {Interfaces} from './Interfaces';
 import ExecuteResult from './Result/ExecuteResult';
 import TYPES from './types';
+import CommandError from './CommandError';
 
 interface Events {
     beforeExecute: (context: CommandContext) => Promise<boolean> | boolean;
@@ -34,8 +35,10 @@ export default class CommandHandler {
     private logger: LoggerInstance;
 
     public install(): void {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.client.on('messageCreate', this.handleCommand.bind(this));
         if (this.configuration.onMessageUpdate) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             this.client.on('messageUpdate', this.handleCommand.bind(this));
         }
     }
@@ -63,11 +66,11 @@ export default class CommandHandler {
                 const result: Interfaces.ResultInterface = await this.commands.executeAsync(context, messageStart);
                 await this.events.afterExecute(context, result);
                 if (result.isSuccess === false) {
-                    if (result.error !== 1) {
+                    if (result.error !== CommandError.UnknownCommand) {
                         this.logger.error('code: %d reason: %s', result.error, result.errorReason);
                     }
                     if (result instanceof ExecuteResult) {
-                        this.logger.error('exception: %O', (result as ExecuteResult).exception);
+                        this.logger.error('exception: %O', (result ).exception);
                     }
                 }
                 this.client.emit('commandExecuted', message, context, result);

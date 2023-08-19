@@ -6,7 +6,6 @@ import TypeReaderValue from '../Result/TypeReaderValue';
 import AbstractTypeReader from './AbstractTypeReader';
 
 export default class PrimitiveTypeReader extends AbstractTypeReader {
-    // @ts-ignore
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         if (/^[0-9.,]+$/.test(input)) {
             const num: number = parseInt(input.replace(/,/g, ''), 10);

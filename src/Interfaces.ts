@@ -23,8 +23,9 @@ export namespace Interfaces {
         permissionStrict: boolean;
         permissionOptions?: PermissionOptions;
         parameters: ParameterInfo[];
+        // eslint-disable-next-line @typescript-eslint/ban-types
         code: Function;
-        types: Object;
+        types: object;
         remainderField: number;
         requiredFields: number[];
     }

@@ -36,7 +36,7 @@ export default class ParseResult implements ResultInterface {
         for (let i = 0; i < argValues.length; i++) {
             argList[i] = TypeReaderResult.fromSuccess(argValues[i]);
         }
-        let paramList: TypeReaderResult[] = [];
+        const paramList: TypeReaderResult[] = [];
         if (paramValues) {
             for (let i = 0; i < paramValues.length; i++) {
                 paramList[i] = TypeReaderResult.fromSuccess(paramValues[i]);

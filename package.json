@@ -5,6 +5,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
+        "lint": "eslint -c .eslintrc.js --ext .ts src",
         "test": "node test/index.js",
         "build": "tsc --project tsconfig.json",
         "prepublishOnly": "npx rimraf dist",
@@ -30,8 +31,11 @@
         "@types/node": "^20.5.1",
         "@types/nodemon": "^1.19.2",
         "@types/semantic-release": "^20.0.1",
+        "@typescript-eslint/eslint-plugin": "^6.4.0",
+        "@typescript-eslint/parser": "^6.4.0",
         "assert": "^2.0.0",
         "eris": "^0.17.2",
+        "eslint": "^8.47.0",
         "nodemon": "^3.0.1",
         "reflect-metadata": "^0.1.13",
         "rimraf": "^5.0.1",
@@ -56,8 +60,18 @@
             "@semantic-release/commit-analyzer",
             "@semantic-release/release-notes-generator",
             "@semantic-release/changelog",
-            "@semantic-release/npm",
-            "@semantic-release/github",
+            [
+                "@semantic-release/npm",
+                {
+                    "pkgRoot": "dist"
+                }
+            ],
+            [
+                "@semantic-release/github",
+                {
+                    "assets": "dist/*"
+                }
+            ],
             "@semantic-release/git"
         ]
     }

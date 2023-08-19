@@ -3,6 +3,7 @@ export default class ParameterInfo {
 
     constructor(
         public name: string,
+        // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
         public type: any,
         public remainder: boolean  = false,
         public isMultiple: boolean = false,

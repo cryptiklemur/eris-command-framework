@@ -30,9 +30,10 @@ export default class CommandInfo implements CommandInterface {
 
     public parameters: ParameterInfo[] = [];
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     public code: Function;
 
-    public types: Object = {};
+    public types: object = {};
 
     public remainderField: number = undefined;
 
@@ -56,28 +57,31 @@ export default class CommandInfo implements CommandInterface {
             if (!parseResult.argValues[i].isSuccess) {
                 return ExecuteResult.fromResult(parseResult.argValues[i]);
             }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             argList[i] = parseResult.argValues[i].values[0].Value;
         }
         for (let i = 0; i < parseResult.paramValues.length; i++) {
             if (!parseResult.paramValues[i].isSuccess) {
                 return ExecuteResult.fromResult(parseResult.paramValues[i]);
             }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             paramList[i] = parseResult.paramValues[i].values[0].Value;
         }
 
         const hasVarArgs: boolean = this.parameters.length > 0
-                                    ? this.parameters[this.parameters.length - 1].isMultiple : false;
+            ? this.parameters[this.parameters.length - 1].isMultiple : false;
         const argCount: number    = this.parameters.length - (hasVarArgs ? 1 : 0);
         const args: any[]         = [];
 
         let i: number = 0;
-        for (let arg of argList) {
+        for (const arg of argList) {
             if (i === argCount) {
                 return ExecuteResult.fromError(
                     CommandError.BadArgCount,
                     'command was invoked with too many parameters',
                 );
             }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             args[i++] = arg;
         }
 
@@ -97,7 +101,7 @@ export default class CommandInfo implements CommandInterface {
 
             return ExecuteResult.fromSuccess();
         } catch (error) {
-            return ExecuteResult.fromException(error);
+            return ExecuteResult.fromException(error as Error);
         }
     }
 
@@ -115,10 +119,11 @@ export default class CommandInfo implements CommandInterface {
 
             const name: string      = names[index];
             const cleanName: string = name.replace(/(^\.\.\.)|(\s+=\s+"?.+"?)$/g, '');
-            let defaultValue: any   = undefined;
+            let defaultValue: any;
 
-            let defaultMatch: RegExpMatchArray = name.match(/\s+=\s+("?.+"?)$/);
+            const defaultMatch: RegExpMatchArray = name.match(/\s+=\s+("?.+"?)$/);
             if (defaultMatch && defaultMatch[1] !== undefined) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 defaultValue = JSON.parse(defaultMatch[1]);
             }
 
@@ -163,7 +168,7 @@ export default class CommandInfo implements CommandInterface {
     private buildSyntax(): void {
         const message: StringBuilder = new StringBuilder();
         message.append(`{prefix}${this.name} `);
-        for (let parameter of this.parameters) {
+        for (const parameter of this.parameters) {
             message.append('<');
             if (parameter.isMultiple || parameter.remainder) {
                 message.append('...');

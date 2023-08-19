@@ -1,4 +1,4 @@
-import {Client, Message, User} from 'eris';
+import Eris, {Client, Message, User} from 'eris';
 import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';
 
@@ -28,15 +28,16 @@ export default class InteractiveHelper {
         timeout: number = 30 * 60 * 1000,
     ): EventEmitter {
         let emitter = new EventEmitter();
-        const listener = (type) => (msg, ...args) => {
+        const listener = (type: 'messageCreate' | 'messageReactionAdd') => (msg: Message<Eris.TextableChannel>, ...args) => {
             if (this.isReply(type, message, msg, user, args)) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 emitter.emit(type, msg, user, ...args);
             }
         };
 
-        const listeners = {};
+        const listeners: Record<string, ReturnType<typeof listener>> = {};
         for (const event of ALLOWED_EVENTS) {
-            const eventListener = listener(event);
+            const eventListener = listener(event as 'messageCreate' | 'messageReactionAdd');
             listeners[event]    = eventListener;
             this.client.on(event, eventListener);
 
@@ -50,7 +51,7 @@ export default class InteractiveHelper {
             );
         }
 
-        emitter.once('close', (inactive) => {
+        emitter.once('close', () => {
             emitter.removeAllListeners();
             emitter = undefined;
             for (const event of Object.keys(listeners)) {

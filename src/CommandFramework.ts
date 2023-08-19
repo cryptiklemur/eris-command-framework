@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-return,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/explicit-module-boundary-types */
 import {Container} from 'inversify';
 import {createLogger, format, Logger} from 'winston';
 
@@ -53,7 +54,7 @@ export default class CommandFramework {
 
         await this.container.get<Authorizer>(Types.security.authorizer).initialize();
         await this.container.get<CommandService>(Types.command.service).initialize(this.plugins);
-        await this.container.get<CommandHandler>(Types.command.handler).install();
+        this.container.get<CommandHandler>(Types.command.handler).install();
     }
 
     public getEntities(): any[] {

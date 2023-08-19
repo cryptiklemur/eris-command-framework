@@ -15,9 +15,9 @@ import TYPES from './types';
 
 @injectable()
 export default class CommandService {
-    private static getMessageStart(input: string, command: CommandInfo) {
+    private static getMessageStart(input: string, command: CommandInfo): number {
         let start = 0;
-        for (let alias of command.aliases) {
+        for (const alias of command.aliases) {
             if (input.startsWith(alias) && alias.length > start) {
                 start = alias.length;
             }
@@ -50,18 +50,21 @@ export default class CommandService {
 
             const plugin: AbstractPlugin = this.container.getNamed<AbstractPlugin>(TYPES.plugin, name);
             await plugin.initialize();
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             const prototype: any = Object.getPrototypeOf(plugin);
             this.plugins[name] = plugin;
 
             const methods: string[] = Object.getOwnPropertyNames(prototype)
-                                            .filter((key) => typeof prototype[key] === 'function');
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                .filter((key) => typeof prototype[key] === 'function');
 
             methods.forEach(
                 (method) => {
-                    const command: Interfaces.CommandInterface = Reflect.getMetadata('command', plugin, method);
+                    const command = Reflect.getMetadata('command', plugin, method) as Interfaces.CommandInterface;
                     if (command) {
                         command.plugin = plugin;
-                        command.code   = plugin[method];
+                        // eslint-disable-next-line @typescript-eslint/ban-types
+                        command.code   = plugin[method] as Function;
 
                         this.commands.push(new CommandInfo(command));
                     }
@@ -84,8 +87,8 @@ export default class CommandService {
             return searchResult;
         }
 
-        for (let command of searchResult.commands) {
-            let preconditionResult: PreconditionResult = this.checkPermissions(context, command);
+        for (const command of searchResult.commands) {
+            const preconditionResult: PreconditionResult = this.checkPermissions(context, command);
             if (!preconditionResult.isSuccess) {
                 if (searchResult.commands.length === 1) {
                     this.logger.debug('Command failed permissions: %O %O', preconditionResult, searchResult);
@@ -129,14 +132,14 @@ export default class CommandService {
         return this.plugins.hasOwnProperty(name);
     }
 
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/require-await
     public async searchAsync(context: CommandContext, input?: string): Promise<SearchResult> {
         let matches: CommandInfo[] = this.commands;
         if (input !== null && input !== undefined) {
             input   = input.toLocaleLowerCase();
             matches = matches.filter(
                 (x) => {
-                    for (let alias of x.aliases) {
+                    for (const alias of x.aliases) {
                         if (input.startsWith(alias)) {
                             return true;
                         }
@@ -148,8 +151,8 @@ export default class CommandService {
         }
 
         return matches.length > 0
-               ? SearchResult.fromSuccess(input, matches)
-               : SearchResult.fromError(CommandError.UnknownCommand, 'Unknown command.');
+            ? SearchResult.fromSuccess(input, matches)
+            : SearchResult.fromError(CommandError.UnknownCommand, 'Unknown command.');
     }
 
     private checkPermissions(context: CommandContext, command: CommandInfo): PreconditionResult {
@@ -161,7 +164,7 @@ export default class CommandService {
         );
 
         return authorized
-               ? PreconditionResult.fromSuccess()
-               : PreconditionResult.fromError(CommandError.UnmetPrecondition, 'Failed Permission Check');
+            ? PreconditionResult.fromSuccess()
+            : PreconditionResult.fromError(CommandError.UnmetPrecondition, 'Failed Permission Check');
     }
 };

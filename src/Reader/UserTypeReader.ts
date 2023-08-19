@@ -27,7 +27,7 @@ export default class UserTypeReader extends AbstractTypeReader {
         }
 
         // By Mention (1.0)
-        let mentionRegex: RegExp = /^<@!?(\d+)>$/;
+        const mentionRegex: RegExp = /^<@!?(\d+)>$/;
         if (mentionRegex.test(input)) {
             if (context.guild) {
                 UserTypeReader.addResult(results, guildUsers.find((x) => x.id === mentionRegex.exec(input)[1]), 1.00);
@@ -37,7 +37,7 @@ export default class UserTypeReader extends AbstractTypeReader {
         }
 
         // By ID (0.9)
-        let idRegex: RegExp = /^(\d+)$/;
+        const idRegex: RegExp = /^(\d+)$/;
         if (idRegex.test(input)) {
             if (context.guild) {
                 UserTypeReader.addResult(results, guildUsers.find((x) => x.id === input), 0.90);
@@ -47,15 +47,15 @@ export default class UserTypeReader extends AbstractTypeReader {
         }
 
         // By Username + Discrim (0.7-0.85)
-        let index: number = input.lastIndexOf('#');
+        const index: number = input.lastIndexOf('#');
         if (index > 0) {
             const username: string = input.substring(0, index);
             const discrim: string  = input.substring(index + 1);
 
-            let globalUser: User = client.users.find(
+            const globalUser: User = client.users.find(
                 (x) => x.discriminator === discrim && x.username.toLowerCase() === username.toLowerCase(),
             );
-            let guildUser: User  = guildUsers.find(
+            const guildUser: User  = guildUsers.find(
                 (x) => x.discriminator === discrim && x.username.toLowerCase() === username.toLowerCase(),
             );
 
@@ -69,16 +69,16 @@ export default class UserTypeReader extends AbstractTypeReader {
         }
 
         // By Username (0.5-0.65)
-        for (let user of client.users.filter((x) => x.username.toLowerCase() === input.toLowerCase())) {
+        for (const user of client.users.filter((x) => x.username.toLowerCase() === input.toLowerCase())) {
             UserTypeReader.addResult(results, user, user.username === input ? 0.60 : 0.50);
         }
-        for (let user of guildUsers.filter((x) => x.username.toLowerCase() === input.toLowerCase())) {
+        for (const user of guildUsers.filter((x) => x.username.toLowerCase() === input.toLowerCase())) {
             UserTypeReader.addResult(results, user, user.username === input ? 0.65 : 0.55);
         }
 
         // By Nickname (0.5-0.65)
         if (context.guild) {
-            for (let user of context.guild.members.filter(
+            for (const user of context.guild.members.filter(
                 (x) => x.nick && x.nick.toLowerCase() === input.toLowerCase(),
             )) {
                 UserTypeReader.addResult(results, user.user, user.username === input ? 0.65 : 0.55);

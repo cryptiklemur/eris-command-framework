@@ -27,7 +27,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
         }
 
         // By Mention (1.0)
-        let mentionRegex: RegExp = /^<#(\d+)>$/;
+        const mentionRegex: RegExp = /^<#(\d+)>$/;
         if (mentionRegex.test(input)) {
             if (context.guild) {
                 ChannelTypeReader.addResult(
@@ -51,7 +51,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
         }
 
         // By ID (0.9)
-        let idRegex: RegExp = /^(\d+)$/;
+        const idRegex: RegExp = /^(\d+)$/;
         if (idRegex.test(input)) {
             if (context.guild) {
                 ChannelTypeReader.addResult(results, guildChannels.find((x) => x.id === input), 0.90);
@@ -72,7 +72,7 @@ export default class ChannelTypeReader extends AbstractTypeReader {
 
         // By name (0.75-0.85)
         // tslint:disable-next-line:max-line-length
-        for (let channel of guildChannels.filter((x) => x.name && (x.name.toLocaleLowerCase() === input.toLocaleLowerCase()))) {
+        for (const channel of guildChannels.filter((x) => x.name && (x.name.toLocaleLowerCase() === input.toLocaleLowerCase()))) {
             ChannelTypeReader.addResult(results, channel, channel.name === input ? 0.85 : 0.75);
         }
 

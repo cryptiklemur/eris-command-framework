@@ -20,10 +20,10 @@ export default class RoleTypeReader extends AbstractTypeReader {
 
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         const results: Dictionary<string, TypeReaderValue> = {};
-        let guildRoles: Role[]                             = context.guild.roles.map((x) => x);
+        const guildRoles: Role[]                             = context.guild.roles.map((x) => x);
 
         // By Mention (1.0)
-        let mentionRegex: RegExp = /^<@&(\d+)>$/;
+        const mentionRegex: RegExp = /^<@&(\d+)>$/;
         if (mentionRegex.test(input)) {
             if (context.guild) {
                 RoleTypeReader.addResult(
@@ -45,7 +45,7 @@ export default class RoleTypeReader extends AbstractTypeReader {
         }
 
         // By ID (0.9)
-        let idRegex: RegExp = /^(\d+)$/;
+        const idRegex: RegExp = /^(\d+)$/;
         if (idRegex.test(input)) {
             if (context.guild) {
                 RoleTypeReader.addResult(results, guildRoles.find((x) => x.id === input), 0.90);
@@ -63,7 +63,7 @@ export default class RoleTypeReader extends AbstractTypeReader {
         }
 
         // By name (0.75-0.85)
-        for (let role of guildRoles.filter((x) => x.name.toLocaleLowerCase() === input.toLocaleLowerCase())) {
+        for (const role of guildRoles.filter((x) => x.name.toLocaleLowerCase() === input.toLocaleLowerCase())) {
             RoleTypeReader.addResult(results, role, role.name === input ? 0.85 : 0.75);
         }
 

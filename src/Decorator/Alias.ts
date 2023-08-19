@@ -1,6 +1,8 @@
 import {Interfaces} from '../Interfaces';
 
-export default (...aliases: string[]) => (target: any, propertyKey: string) => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export default (...aliases: string[]) => (target: any, propertyKey: string): void => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-argument
     const metadata: Interfaces.CommandInterface = Reflect.getOwnMetadata('command', target, propertyKey) || {};
 
     if (Array.isArray(metadata.aliases)) {
@@ -9,5 +11,6 @@ export default (...aliases: string[]) => (target: any, propertyKey: string) => {
         metadata.aliases = aliases;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     Reflect.defineMetadata('command', metadata, target, propertyKey);
 };
