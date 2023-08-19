@@ -1,3 +1,10 @@
+## [2.5.12](https://github.com/aequasi/eris-command-framework/compare/v2.5.11...v2.5.12) (2023-08-19)
+
+
+### Bug Fixes
+
+* **GHA:** Adding rimraf ([9465100](https://github.com/aequasi/eris-command-framework/commit/946510013815aa934463aa09fca8b579009bb7e7))
+
 ## [2.5.11](https://github.com/aequasi/eris-command-framework/compare/v2.5.10...v2.5.11) (2023-08-19)
 
 
