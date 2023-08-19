@@ -2,12 +2,12 @@
     "name": "eris-command-framework",
     "description": "Command Framework for Eris",
     "version": "3.0.0",
-    "main": "index.js",
-    "types": "index.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "test": "node test/index.js",
         "build": "tsc --project tsconfig.json",
-        "prepublishOnly": "rm -r src && mv dist/* . && rmdir dist"
+        "prepublishOnly": "npx rimraf dist"
     },
     "author": "Aaron Scherer <aequasi@gmail.com>",
     "license": "MIT",
