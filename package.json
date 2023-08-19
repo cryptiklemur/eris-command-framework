@@ -7,7 +7,7 @@
     "scripts": {
         "lint": "eslint -c .eslintrc.js --ext .ts src",
         "test": "node test/index.js",
-        "build": "tsc --project tsconfig.json",
+        "build": "tsc --project tsconfig.json && cp package.json package-lock.json README.md LICENSE dist",
         "prepublishOnly": "npx rimraf dist",
         "postversion": "cp -r package.json .."
     },
