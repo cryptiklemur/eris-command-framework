@@ -1,6 +1,6 @@
 import {Client, TextableChannel} from 'eris';
 import {Container, inject, injectable, optional} from 'inversify';
-import * as moment from 'moment';
+import moment from 'moment';
 import {Connection, Repository} from 'typeorm';
 import {Logger} from 'winston';
 

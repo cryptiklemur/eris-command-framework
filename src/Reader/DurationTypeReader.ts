@@ -1,5 +1,5 @@
 import {Client} from 'eris';
-import * as moment from 'moment-timezone';
+import moment from 'moment-timezone';
 
 import CommandContext from '../CommandContext';
 import CommandError from '../CommandError';

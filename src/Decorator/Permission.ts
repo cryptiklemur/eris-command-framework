@@ -4,7 +4,7 @@ export interface PermissionOptions {
     node?: string;
     noWildcards?: boolean;
     owner?: boolean;
-    permission?: number;
+    permission?: bigint;
     botOwner?: boolean;
 }
 

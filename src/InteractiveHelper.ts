@@ -1,4 +1,3 @@
-import {emit} from 'cluster';
 import {Client, Message, User} from 'eris';
 import {EventEmitter} from 'events';
 import {inject, injectable} from 'inversify';

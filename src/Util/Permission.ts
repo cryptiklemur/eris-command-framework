@@ -5,13 +5,13 @@ import {Constants, GuildChannel, Member, PermissionOverwrite} from 'eris';
  * @see https://github.com/DV8FromTheWorld/JDA/blob/master/src/main/java/net/dv8tion/jda/core/utils/PermissionUtil.java
  */
 export default abstract class Permission {
-    public static hasPermission(permission: number, member: Member, channel?: GuildChannel): boolean {
+    public static hasPermission(permission: bigint, member: Member, channel?: GuildChannel): boolean {
         return (this.getEffectivePermission(member, channel) & permission) === permission;
     }
 
-    public static getEffectivePermission(member: Member, channel?: GuildChannel): number {
+    public static getEffectivePermission(member: Member, channel?: GuildChannel): bigint {
         const guild = member.guild;
-        let permission: number;
+        let permission: bigint;
         if (!channel) {
             if (guild.ownerID === member.id) {
                 return Constants.Permissions.all;
@@ -44,12 +44,12 @@ export default abstract class Permission {
         const {allow, deny} = Permission.getExplicitOverrides(channel, member);
         permission = Permission.apply(permission, allow, deny);
 
-        return Permission.isApplied(permission, Constants.Permissions.readMessages) ? permission : 0;
+        return Permission.isApplied(permission, Constants.Permissions.readMessages) ? permission : 0n;
     }
 
-    private static getExplicitOverrides(channel: GuildChannel, member: Member): {allow: number, deny: number} {
-        let allow: number = 0;
-        let deny: number  = 0;
+    private static getExplicitOverrides(channel: GuildChannel, member: Member): {allow: bigint, deny: bigint} {
+        let allow: bigint = 0n;
+        let deny: bigint  = 0n;
 
         let override: PermissionOverwrite = channel.permissionOverwrites.get(channel.guild.id);
         if (override) {
@@ -57,8 +57,8 @@ export default abstract class Permission {
             deny  = override.deny;
         }
 
-        let allowRole: number = 0;
-        let denyRole: number  = 0;
+        let allowRole: bigint = 0n;
+        let denyRole: bigint  = 0n;
         for (const roleId of member.roles.values()) {
             const role = channel.guild.roles.get(roleId);
             override   = channel.permissionOverwrites.get(role.id);
@@ -82,11 +82,11 @@ export default abstract class Permission {
         return {allow, deny};
     }
 
-    private static isApplied(permissions: number, perms: number): boolean {
+    private static isApplied(permissions: bigint, perms: bigint): boolean {
         return (permissions & perms) === perms;
     }
 
-    private static apply(permission: number, allow: number, deny: number): number {
+    private static apply(permission: bigint, allow: bigint, deny: bigint): bigint {
         permission &= ~deny; // Deny Everything that the cascade of roles denied
         permission |= allow; // Allow all the things that the cascade of roles allowed (allowed overrides denied)
 

@@ -15,7 +15,7 @@ export default class DateTypeReader extends AbstractTypeReader {
     // @ts-ignore
     public read(client: Client, context: CommandContext, input: string): TypeReaderResult {
         try {
-            return TypeReaderResult.fromSuccess(new TypeReaderValue(chrono.parseDate(input, Date.now()), 1.0));
+            return TypeReaderResult.fromSuccess(new TypeReaderValue(chrono.parseDate(input, new Date()), 1.0));
         } catch (error) {}
 
         return TypeReaderResult.fromError(CommandError.ParseFailed, 'Unable to parse duration.');
