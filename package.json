@@ -1,7 +1,7 @@
 {
     "name": "eris-command-framework",
     "description": "Command Framework for Eris",
-    "version": "2.5.12",
+    "version": "2.5.13",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
