@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/aequasi/eris-command-framework/compare/v2.5.13...v3.0.0) (2023-08-19)
+
+
+### chore
+
+* **GHA:** Deprecating ([d944826](https://github.com/aequasi/eris-command-framework/commit/d944826204285b431af4e04636121580ac8ee2dc))
+
+
+### BREAKING CHANGES
+
+* **GHA:** Forcing major version
+
 ## [2.5.13](https://github.com/aequasi/eris-command-framework/compare/v2.5.12...v2.5.13) (2023-08-19)
 
 
